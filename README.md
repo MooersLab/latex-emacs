@@ -2,8 +2,6 @@
 
 ## Emacs profile for LaTeX.
 
-# latex-emacs
-
 This repo contains is a init.el file (configuration file) for using LaTeX in Emacs.
 I built it on top of a configuration by [Alvaro Ortiz Troncoso](https://github.com/aot29/Emacs_Python_R_LaTeX).
 His configuration included the auto-complete-auctex.el of Chris Monsanto from 2012.
