@@ -19,6 +19,8 @@ This flag is available as of the summer of 2022 with Emacs version 28.1 and grea
 
 No warranty is implied. Use at your own risk.
 
+I used this configuration to prepare the [presentation](https://github.com/MooersLab/BerlinEmacsAugust2022) give to the Berlin Emacs Meetup 31 August 2022.
+
 ## Why LaTeX?
 
 LaTeX is the gold standard markup system for technical writing.
