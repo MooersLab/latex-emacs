@@ -195,7 +195,7 @@ If you are rusty or starting out with Emacs, these 23 keys are all that you shou
 
 |Key binding | Description|
 |:-----------|:-----------|
-|C-c C-x | Quit Emacs|
+|C-x C-x | Quit Emacs|
 |C-g     | Abort current command|
 |C-x C-f | Open a file|
 |M-!     | Open a shell, perhaps to create a file to open: touch new.tex|
@@ -214,7 +214,7 @@ If you are rusty or starting out with Emacs, these 23 keys are all that you shou
 |C-x d   | Open dired for directory navigation.|
 |C-h     | Invoke the help menu. |
 |M-x package-list-packages | Refresh list of packages. May be prompted to install updpates: enter u x y to upgrade packages.|
-|M-x package-install | Must package-list-packages first.|
+|M-x package-install | Must run `package-list-packages` first.|
 |M-\     | Will join the two words by removing the whitespaces between two words. |
 |M-d     | Delete word. |
 |C-d     | Delete character. |
