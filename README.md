@@ -29,7 +29,7 @@ Unfortunately, it is not available for Emacs 28.1.
 
 No warranty is implied. Use at your own risk.
 
-I used this configuration to prepare the [presentation](https://github.com/MooersLab/BerlinEmacsAugust2022) give to the Berlin Emacs Meetup 31 August 2022.
+I used this configuration to prepare the [presentation](https://github.com/MooersLab/BerlinEmacsAugust2022) given to the Berlin Emacs Meetup 31 August 2022.
 
 ## Why LaTeX?
 
