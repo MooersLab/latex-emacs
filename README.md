@@ -169,7 +169,7 @@ These keybindings are active in the latex-mode or useful in this mode.
 |C-c C-c     | Compile document.|
 |C-c `       | Got to compile error.|
 |C-c C-p C-s | Preview regions.|
-| C-c =.     | Open navigable table of contents view of the document. |
+| C-c =      | Open navigable table of contents view of the document. |
 |C-c C-k     | Kill the tex file processing.   |
 |C-c ;       | Comment out a region.|
 |C-c %       | Comment out a paragraph|
