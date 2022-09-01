@@ -207,7 +207,7 @@ If you are rusty or starting out with Emacs, these 23 keys are all that you shou
 |C-x C-w | Save file to specified filename.|
 |C-y     | Paste clipboard. |
 |C-w     | Cut |
-|s-c     | Copy (option-c)|
+|s-c     | Copy (option-c). The init.el file above maps the Mac option key to `s`, the Super key.|
 |C-k     | Delete line and store in kill ring (i.e., clipboard). Repeat to delete new-line character.|
 |C-a     | Move cursor to beginning of the line.|
 |C-e     | Move cursor to the end of the line.|
