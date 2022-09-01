@@ -228,9 +228,9 @@ However, there are conflicts with the latex keybindings.
 I recommend either using evil-mode or just learn the essential Emacs key-bindings.
 
 
-## Quizzes (...comming soon)
+## Quizzes
 
 The recall of key bindings fades quickly after the first encounter but improves with spaced repetitions.
-I provide two sets of quizzes to improve recall:  One set each set of the above key bindings.
+I have provide two sets of quizzes to improve recall:  One set each set of the above key bindings.
 The quizzes in a set have the same questions, but their order has been randomized.
 
