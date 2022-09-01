@@ -11,10 +11,20 @@ See the [Features](#Features) section below.
 I am keeping this configuration isolated from my main configuration to ease its development.
 It is also meant to serve as a backup configuration file when the main one is broken.
 
-I have used it with the [chemacs2](https://github.com/plexus/chemacs2) package and the `--with-profile` flag.
+I have used this init file with the [chemacs2](https://github.com/plexus/chemacs2) package and the `--with-profile` flag.
+If you have Emacs version 28.1 or earlier, you have to use this option.
+Create a file called .emacs-profiles.el in you home directory.
+
+```elisp
+(("default" . ((user-emacs-directory . "~/.emacs.default")))
+ ("latex" . ((user-emacs-directory . "~/latex-emacs")))
+ )
+```
+Launch Emacs with `emacs --with-profile latex`.
+
 I now use ` --init-directory` flag pointed to the folder `latex-emacs`.
 This second approach does not require any configuration.
-This flag is available as of January 2022 with Emacs version 29.1.
+This flag is available as of January 2022 with Emacs version 29.0.5.
 Unfortunately, it is not available for Emacs 28.1.
 
 No warranty is implied. Use at your own risk.
@@ -25,7 +35,7 @@ I used this configuration to prepare the [presentation](https://github.com/Mooer
 
 LaTeX is the gold standard markup system for technical writing.
 
-- Combine passion for coding with writing: Makes writing more fun.
+- Combine passion for coding with writing: Make writing more fun.
 - Code reuse: recycle old documents.
 - Precise control over appearance of output.
 - Equation typesetting par none.
@@ -72,11 +82,11 @@ I recommend it for anyone trying to master LaTeX.
 
 The advantages of Emacs over Overleaf for editing LaTeX files include the following:
 
-- The yasnippets package. You can build your own including templates for new documents.
-- Powerful macros to support creating and editing new documents
-- Syntax checker before compiling
+- The avialability of the yasnippets package. You can build your own document templates and save them as yasnippet snippets. You then insert the document template into a new file the entering the snippet name and hitting tab.
+- Powerful macros in AUCTeX support creating and editing new documents.
+- Syntax checking before compiling is available. See keybindng lists below.
 - Terse and clear bug reporting during PDF compiling
-- Preview in the buffer of selected regions (This is wash. Preview is buggy, and PDF compiling is about as fast).
+- Preview a rendered version of a select region in the buffer. The preview can be removed with a key binding. This is great from checking the typesetting of an equation.
 
 
 ## Why not Org-mode
@@ -84,7 +94,7 @@ The advantages of Emacs over Overleaf for editing LaTeX files include the follow
 Org-mode includes support for document preparation, time management, and literate programming.
 Many Emacs users in the past decade were drawn to Emacs by org-mode.
 Org documentations can recognize LaTeX markup.
-Exporting org documents through LaTeX to PDFs is seemless.
+Exporting an org document through LaTeX to PDF is seemless.
 I like using org-mode.
 
 The main drawbacks for me are as follows:
@@ -94,7 +104,7 @@ The main drawbacks for me are as follows:
 - Org markup adds another layer of abstraction on top of LaTeX.
 
 I am already comfortable with LaTeX.
-I do not need the crutch of org.
+I do not need the crutch of org to produce tex files.
 
 
 <a id="Features"><h2>Features:</h2></a>
@@ -107,18 +117,16 @@ I do not need the crutch of org.
 - Configured to cope with the minted package under compiling. Gets around the `compile with -shell-escape` command.
 - Configured to use snippets from yasnippets.
 - Has hippieexpand enabled.
-- Uses the awesome-tabs package to enable navigation between buffers via tabs. 
+- Uses the awesome-tabs package to enable navigation between buffers via tabs. (I know, not good ergonomics.)
 - Has the word count mode enabled.
 - Has minibuffer history.
-- BibTeX configured with use with org-ref.
 - Has ivy enabled for enhanced autocompletion selections.
-- Atomic-chrome to interact with GhostText extension for Google Chrome so you can edit in Emacs LaTeX documents on Chrome.
+- Atomic-chrome configured to interact with GhostText extension for Google Chrome so you can edit in Emacs LaTeX documents on Chrome.
 - Use the texcount script with `C-c w` to get a more accurate word count in the latex-mode.
 - Move lines up and down with the meta and the arrow keys.
 - Scratch buffer retained.
-- Add the itemize function to convert selected markdown lists into latex itemize, description, or enumerated lists.
-- Include configuration for changing the size of the font in the modeline. This is useful for preparing slides about using Emacs.
-
+- Add the itemize, enumerate, and description functions to convert selected markdown lists into LaTeX itemize, description, or enumerated lists.
+- Included configuration for changing the size of the font in the modeline. This is useful for preparing slides about using Emacs.
 
 
 ## Installation
@@ -127,22 +135,22 @@ I do not need the crutch of org.
 2. Install Prot's ef-theme or comment out the corresponding code in init.el.
 3. Create link to your snippets folder:  `ln -s snippets ~/.emacs.d/snippets`
 4. Edit file paths in init.el as needed.
-5. Add `alias e28l='emacs --init-directory ~/latex-emacs'` to your `.bashrc` or `.zshrc` file so you can open Emacs with alias `e28l`.
+5. Add `alias e28l='emacs --with-profile latex-emacs` to your `.bashrc` or `.zshrc` file so you can open Emacs with alias `e28l`. Or with Emacs version 29.1, add `alias e29l='emacs --init-directory ~/latex-emacs'`.
 6. Add the GhostText extension to Chrome.
 7. Install LaTeX and include in your PATH.
-8. Edit in init.el the file path to texcount, which is generally installed with LaTeX. You might be able invoke texcount without  the path if there are no aliases to do it.
+8. Edit in init.el the file path to texcount, which is generally installed with LaTeX. You might be able invoke texcount without the path if there are no previously defined aliases to do it.
 
 
 ## Operation
 
-This setup can be run in versions > 28.0 with emacs `emacs --init-directory ~/latex-emacs`.
+This setup can be run in versions > 29.0.5 with `emacs --init-directory ~/latex-emacs`.
 This command ignores your default Emacs configuration in `~/.emacs.d`
 You can run it in isolation of your default emacs configuration.
-Makes for a nice backup system which your main configuration is broken.
+Makes for a nice backup system when your main configuration is broken.
 
 Create an empty tex file with `touch start.tex`.
 Start Emacs and load the file.
-Enter `C-o C-e` 
+Enter `C-o C-e` to create a new document using the correpsonding [AUCTeX](https://www.gnu.org/software/auctex/) macro.
 
 
 ## Key bindings
@@ -223,6 +231,6 @@ I recommend either using evil-mode or just learn the essential Emacs key-binding
 ## Quizzes (...comming soon)
 
 The recall of key bindings fades quickly after the first encounter but improves with spaced repetitions.
-I provide two sets of quiz to improve recall:  One set each set of key bindings.
+I provide two sets of quizzes to improve recall:  One set each set of the above key bindings.
 The quizzes in a set have the same questions, but their order has been randomized.
 
