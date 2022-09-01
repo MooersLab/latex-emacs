@@ -11,9 +11,11 @@ See the [Features](#Features) section below.
 I am keeping this configuration isolated from my main configuration to ease its development.
 It is also meant to serve as a backup configuration file when the main one is broken.
 
-I have used it with the chemacs2 package and the `--with-profile` flag.
-I now use the simple approach of using the ` --init-directory` flag pointed to the folder `latex-emacs`.
-This flag is available as of the summer of 2022 with Emacs version 28.1 and greater.
+I have used it with the [chemacs2](https://github.com/plexus/chemacs2) package and the `--with-profile` flag.
+I now use ` --init-directory` flag pointed to the folder `latex-emacs`.
+This second approach does not require any configuration.
+This flag is available as of January 2022 with Emacs version 29.1.
+Unfortunately, it is not available for Emacs 28.1.
 
 No warranty is implied. Use at your own risk.
 
