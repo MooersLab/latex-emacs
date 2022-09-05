@@ -651,6 +651,7 @@
 ;;### Move selected regions up or down
 ;; It is commands like these one that enable rapid reorganization of your prose when writing one sentence per row.
 ;; Thank you to DivineDomain for the suggested upgrade.
+;; Source: https://www.emacswiki.org/emacs/MoveText 
 (defun move-text-internal (arg)
   (cond
    ((and mark-active transient-mark-mode)
