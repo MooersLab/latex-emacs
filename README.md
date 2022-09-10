@@ -1,19 +1,27 @@
-# latex-emacs
+# latex-emacs: a GNU Emacs profile for LaTeX
+## Make writing tasks fun be disguising them as coding!
 
-## Emacs profile for LaTeX.
+This repo contains is a init.el file (configuration file) for using LaTeX in GNU Emacs.
+It can probably be adapted to other configurations of Emacs like Spacemacs, Doom, and so on.
+SciMax probably has similar support really built-in.
 
-This repo contains is a init.el file (configuration file) for using LaTeX in Emacs.
-I built it on top of a configuration by [Alvaro Ortiz Troncoso](https://github.com/aot29/Emacs_Python_R_LaTeX).
-His configuration included the auto-complete-auctex.el of Chris Monsanto from 2012.
+I built the latex-emacs profile on top of a configuration by [Alvaro Ortiz Troncoso](https://github.com/aot29/Emacs_Python_R_LaTeX).
+His configuration included the auto-complete-auctex.el package of Chris Monsanto from 2012.
+Although the autocompletion is out of style for Emacs aficinados, it works!
+
 My configuration is designed to support efficient editing of academic documents in LaTeX.
 See the [Features](#Features) section below.
+See the [related repos](#Related) section below for LaTeX templates for the first manuscript submission, a writing log to accompany every writing project, a poster, a slideshow, a diary for 2022, and a diary for 2023.
 
-This configuration is compatible with the use of org-mode, an enhanced form of markdown that read LaTeX code and that is very popular with many users of Emacs.
-You can read a org document into Emacs with this configuration even though the init.el file does not call org because org is now built into the distribution of Emacs.
+This configuration is compatible with the use of org-mode, an enhanced form of markdown that can read LaTeX code intermingled with org markup and that is very popular with users of Emacs because the sections and subsections are easy to fold and org documents are easy to export to a number of different file formats.
+Org-mode is largely responsible for the recent resurgence in the popularity Emacs, which is reflected in the recent annual [emacsconfs](https://emacsconf.org/).
+Org-mode also supports literate programming with almost any programming language, although the latex-emacs init.el file is not configured for literate programming.
+Instead, see my full configuration for [Emacs](https://github.com/MooersLab/configorg), which is actually written in org!
+You can read a org document into Emacs with this configuration even though the latex-emacs init.el file does not call org because org is now built into the base distribution of Emacs.
 See the this [repo](https://github.com/MooersLab/manuscriptInOrg) for a manuscript template written to be edited in org-mode.
-See this [repo](https://github.com/MooersLab/writingLogTemplateInOrg) for a writing log to be used in parallel to the manuscript that is also written for use in org-mode.
+See this [repo](https://github.com/MooersLab/writingLogTemplateInOrg) for a writing log to be used in parallel to the manuscript in org that is also written for use in org-mode.
 
-I am keeping this configuration isolated from my main configuration to ease its development.
+I am keeping the latex-eamcs configuration isolated from my main configuration to ease its development.
 It is also meant to serve as a backup configuration file when the main one is broken.
 
 I have used this init file with the [chemacs2](https://github.com/plexus/chemacs2) package and the `--with-profile` flag.
@@ -27,10 +35,18 @@ Create a file called .emacs-profiles.el in you home directory.
 ```
 Launch Emacs with `emacs --with-profile latex`.
 
-I now use ` --init-directory` flag pointed to the folder `latex-emacs`.
-This second approach does not require any configuration.
+I now use `--init-directory` flag pointed to the folder `latex-emacs`.
+Well, actually use this following bash alias: 
+
+```bash
+alias e29l='/Applications/Emacs29.0.5.app/Contents/MacOS/Emacs --init-directory ~/latex-emacs'.
+```
+
+The use of this second flag does not require any configuration.
 This flag is available as of January 2022 with Emacs version 29.0.5.
-Unfortunately, it is not available for Emacs 28.1.
+This bleeding edge build of GNU Emacs can be found under the nightlies builds [here](https://emacsformacos.com/builds) for the Mac, even though the version number is not explicit in the name of these builds.
+These builds may have bugs, but I have not run into one in two years of using them.
+Unfortunately, this flag is not available for Emacs 28.1. 
 
 No warranty is implied. Use at your own risk.
 
@@ -40,7 +56,7 @@ I used this configuration to prepare the [presentation](https://github.com/Mooer
 
 LaTeX is the gold standard markup system for technical writing.
 
-- Combine passion for coding with writing: Make writing more fun.
+- Combine passion for coding with writing (e.i., make writing fun be disguising it as coding).
 - Code reuse: recycle old documents.
 - Precise control over appearance of output.
 - Equation typesetting par none.
@@ -239,7 +255,9 @@ The recall of key bindings fades quickly after the first encounter but improves 
 I have provide two sets of quizzes to improve recall:  One set each set of the above key bindings.
 The quizzes in a set have the same questions, but their order has been randomized.
 
-## Related projects of possible interest
+
+<a id="Releted"><h2>Related projects of possible interest</h2></a>
+
 
 - [LaTeX manuscript template](https://github.com/MooersLab/manuscriptInLaTeX/edit/main/README.md)
 - [Writing log template in LaTeX](https://github.com/MooersLab/writingLogTemplate)
