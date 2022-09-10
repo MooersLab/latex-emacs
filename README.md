@@ -15,13 +15,15 @@ See the [related repos](#Related) section below for LaTeX templates for the firs
 
 This configuration is compatible with the use of org-mode, an enhanced form of markdown that can read LaTeX code intermingled with org markup and that is very popular with users of Emacs because the sections and subsections are easy to fold and org documents are easy to export to a number of different file formats.
 Org-mode is largely responsible for the recent resurgence in the popularity Emacs, which is reflected in the recent annual [emacsconfs](https://emacsconf.org/).
+
 Org-mode also supports literate programming with almost any programming language, although the latex-emacs init.el file is not configured for literate programming.
 Instead, see my full configuration for [Emacs](https://github.com/MooersLab/configorg), which is actually written in org!
-You can read a org document into Emacs with this configuration even though the latex-emacs init.el file does not call org because org is now built into the base distribution of Emacs.
+
+You can read a org document into Emacs with the *latex-emacs* configuration even though the latex-emacs init.el file does not call org because org is now built into the base distribution of Emacs.
 See the this [repo](https://github.com/MooersLab/manuscriptInOrg) for a manuscript template written to be edited in org-mode.
 See this [repo](https://github.com/MooersLab/writingLogTemplateInOrg) for a writing log to be used in parallel to the manuscript in org that is also written for use in org-mode.
 
-I am keeping the latex-eamcs configuration isolated from my main configuration to ease its development.
+I am keeping the *latex-eamcs* configuration isolated from my main configuration to ease its development.
 It is also meant to serve as a backup configuration file when the main one is broken.
 
 I have used this init file with the [chemacs2](https://github.com/plexus/chemacs2) package and the `--with-profile` flag.
@@ -96,17 +98,21 @@ According to the Lindy effect, it should be available for another 45 years.
 
 Overleaf is web-based LaTeX editor.
 It is great for maintaining multiple writing projects and collaborative editing.
-Its interface is intuitive and it is painless to compile documents into PDFs.
-It has on the best collection of on-line documentation about LaTeX.
-I have 100s of writing projects on it and have subscribed to the Pro license for several years.
-I recommend it for anyone trying to master LaTeX.
+Its interface is intuitive, and it is painless to compile documents into PDFs.
+The compile times are several times faster on the Overleaf servers than on my computer.
+Overleaf also has an extensive collection of attractive on-line documentation about LaTeX.
 
-The advantages of Emacs over Overleaf for editing LaTeX files include the following:
+I have over 600s writing projects on it and have subscribed to the Pro license for several years.
+I recommend the free account to anyone trying to master LaTeX.
+I recommend the Pro license for anyone doing collaborative writing.
+The Pro license also enables the use of git to make copy copies of the writing projects.
 
-- The avialability of the yasnippets package. You can build your own document templates and save them as yasnippet snippets. You then insert the document template into a new file the entering the snippet name and hitting tab.
+### Advantages of using LaTeX in Emacs over Overleaf
+
+- The availability of the yasnippets package. You can build your own document templates and save them as yasnippet snippets. You then insert the document template into a new file the entering the snippet name and hitting tab.
 - Powerful macros in AUCTeX support creating and editing new documents.
 - Syntax checking before compiling is available. See keybindng lists below.
-- Terse and clear bug reporting during PDF compiling
+- Terse and clear bug reporting during PDF compiling.
 - Preview a rendered version of a select region in the buffer. The preview can be removed with a key binding. This is great from checking the typesetting of an equation.
 
 
