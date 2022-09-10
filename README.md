@@ -1,5 +1,5 @@
 # latex-emacs: a GNU Emacs profile for LaTeX
-## Make writing tasks fun be disguising them as coding!
+## Make writing tasks fun be disguising them as coding projects!
 
 This repo contains is a init.el file (configuration file) for using LaTeX in GNU Emacs.
 It can probably be adapted to other configurations of Emacs like Spacemacs, Doom, and so on.
