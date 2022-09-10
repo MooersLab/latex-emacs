@@ -8,6 +8,11 @@ His configuration included the auto-complete-auctex.el of Chris Monsanto from 20
 My configuration is designed to support efficient editing of academic documents in LaTeX.
 See the [Features](#Features) section below.
 
+This configuration is compatible with the use of org-mode, an enhanced form of markdown that read LaTeX code and that is very popular with many users of Emacs.
+You can read a org document into Emacs with this configuration even though the init.el file does not call org because org is now built into the distribution of Emacs.
+See the this [repo](https://github.com/MooersLab/manuscriptInOrg) for a manuscript template written to be edited in org-mode.
+See this [repo](https://github.com/MooersLab/writingLogTemplateInOrg) for a writing log to be used in parallel to the manuscript that is also written for use in org-mode.
+
 I am keeping this configuration isolated from my main configuration to ease its development.
 It is also meant to serve as a backup configuration file when the main one is broken.
 
