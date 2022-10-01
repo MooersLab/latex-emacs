@@ -21,7 +21,7 @@
 ;; ##################################### BASIC CUSTOMIZATION ######################################
 (setq inhibit-startup-message t) ;; hide the startup message
 ;; (load-theme 'material t) ;; load material theme
-(global-linum-mode t) ;; enable line numbers globally
+;; (global-linum-mode t) ;; enable line numbers globally
 (set-default 'truncate-lines t) ;; do not wrap
 (prefer-coding-system 'utf-8) ;; use UTF-8
 
@@ -647,6 +647,74 @@
 
 ;;## M
 
+;;### Configured for GitHub Markdown
+(use-package markdown-mode
+  :ensure t
+  :mode ("\\.md\\'" . gfm-mode)
+  :commands (markdown-mode gfm-mode)
+  :config
+  (setq markdown-command "pandoc -t html5"))
+;;Install simple-httpd and impatient-mode packages.
+(use-package simple-httpd
+  :ensure t
+  :config
+  (setq httpd-port 7070)
+  (setq httpd-host (system-name)))
+;; The impatient-mode package takes the content of your buffer, passes it through a filter, and serves the result via simple-httpd HTTP server.
+(use-package impatient-mode
+  :ensure t
+  :commands impatient-mode)
+;; Create a filter function to process the Markdown buffer. 
+;; The function my-markdown-filter uses github-markdown-css to mimic the look of GitHub.
+(defun my-markdown-filter (buffer)
+  (princ
+   (with-temp-buffer
+     (let ((tmp (buffer-name)))
+       (set-buffer buffer)
+       (set-buffer (markdown tmp))
+       (format "<!DOCTYPE html><html><title>Markdown preview</title><link rel=\"stylesheet\" href = \"https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.min.css\"/>
+<body><article class=\"markdown-body\" style=\"box-sizing: border-box;min-width: 200px;max-width: 980px;margin: 0 auto;padding: 45px;\">%s</article></body></html>" (buffer-string))))
+   (current-buffer)))
+;; Create the function my-markdown-preview to show the preview. 
+(defun my-markdown-preview ()
+  "Preview markdown."
+  (interactive)
+  (unless (process-status "httpd")
+    (httpd-start))
+  (impatient-mode)
+  (imp-set-user-filter 'my-markdown-filter)
+  (imp-visit-buffer))
+;; Run my-markdown-preview in any Markdown buffer.
+;; It will open a new window in your browser and update it as you type.
+
+
+; ;; Let's try an org-mode previewer
+; (require 'org-mode
+;   :mode ("\\.org\\'" . gfm-mode)
+;   :commands (org-mode gfm-mode)
+;   :config
+;   (setq org-command "pandoc -t html5"))
+;
+;   (defun my-org-filter (buffer)
+;     (princ
+;      (with-temp-buffer
+;        (let ((tmp (buffer-name)))
+;          (set-buffer buffer)
+;          (set-buffer (org tmp))
+;          (format "<!DOCTYPE html><html><title>Markdown preview</title><link rel=\"stylesheet\" href = \"https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.min.css\"/>
+;   <body><article class=\"markdown-body\" style=\"box-sizing: border-box;min-width: 200px;max-width: 980px;margin: 0 auto;padding: 45px;\">%s</article></body></html>" (buffer-string))))
+;      (current-buffer)))
+;   ;; Create the function my-org-preview to show the preview.
+;
+; (defun my-org-preview ()
+;   "Preview org."
+;   (interactive)
+;   (unless (process-status "httpd")
+;     (httpd-start))
+;   (impatient-mode)
+;   (imp-set-user-filter 'my-og-filter)
+;   (imp-visit-buffer))
+
 
 ;;### Move selected regions up or down
 ;; It is commands like these one that enable rapid reorganization of your prose when writing one sentence per row.
@@ -720,6 +788,72 @@
 
 ;; (global-set-key (kbd "M-<up>") 'move-line-up)
 ;; (global-set-key (kbd "M-<down>") 'move-line-down)
+
+
+;;## O
+
+;; org-drill for spaced repetition learning in org-mode
+;; You have to install org-drill from MELPA.;; This is a YouTube video about how to use org-drill[[https://www.youtube.com/watch?v=uraPXeLfWcM][to learn Chinese]].
+;;You can use org tables to generate [[https://github.com/chrisbarrett/org-drill-table][flashcards]].
+(use-package org-drill
+             :ensure t
+             :config (progn
+                          (add-to-list 'org-modules 'org-drill)
+                          (setq org-drill-add-random-noise-to-intervals-p t)
+                          (setq org-drill-hint-separator "||")
+                          (setq org-drill-left-cloze-delimiter "<[")
+                          (setq org-drill-right-cloze-delimiter "]>")
+                          (setq org-drill-learn-fraction 0.25)
+             )
+)
+
+
+
+
+;; Basic org-roam config
+(use-package org-roam
+  :ensure t
+  :custom
+  (org-roam-directory (file-truename "/Users/blaine/org-roam/"))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n g" . org-roam-graph)
+         ("C-c n i" . org-roam-node-insert)
+         ("C-c n c" . org-roam-capture)
+         ;; Dailies
+         ("C-c n j" . org-roam-dailies-capture-today))
+  :config
+  ;; If you're using a vertical completion framework, you might want a more informative completion interface
+  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+  (org-roam-db-autosync-mode)
+  ;; If using org-roam-protocol
+  (require 'org-roam-protocol))
+
+
+  (use-package org-roam-bibtex
+      :hook (org-roam-mode . org-roam-bibtex-mode))
+
+    (setq orb-preformat-keywords
+          '("citekey" "title" "url" "author-or-editor" "keywords" "file")
+          orb-process-file-keyword t
+          orb-file-field-extensions '("pdf"))
+
+    (setq orb-templates
+          '(("r" "ref" plain(function org-roam-capture--get-point)
+             ""
+             :file-name "${citekey}"
+             :head "#+TITLE: ${citekey}: ${title}\n#+ROAM_KEY: ${ref}
+  - tags ::
+  - keywords :: ${keywords}
+
+  *Notes
+  :PROPERTIES:
+  :Custom_ID: ${citekey}
+  :URL: ${url}
+  :AUTHOR: ${author-or-editor}
+  :NOTER_DOCUMENT: ${file}
+  :NOTER_PAGE:
+  :END:")))
 
 
 ;;## P
@@ -855,7 +989,7 @@
  '(ac-menu-height 15)
  '(ivy-height 20)
  '(package-selected-packages
-   '(ef-themes yasnippet wc-mode use-package rainbow-delimiters powerline maxframe material-theme exec-path-from-shell electric-spacing better-defaults auto-complete auctex atomic-chrome)))
+   '(org-roam-timestamps org-roam-bibtex org-roam-ui org-roam org-preview-html impatient-mode ef-themes yasnippet wc-mode use-package rainbow-delimiters powerline maxframe material-theme exec-path-from-shell electric-spacing better-defaults auto-complete auctex atomic-chrome)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
