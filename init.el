@@ -111,6 +111,8 @@
 (save-place-mode 1)
 
 
+
+
 ;; These settings enables using the same configuration file on multiple platforms.
 ;; Note that windows-nt includes [[https://www.gnu.org/software/emacs/manual/html_node/elisp/System-Environment.html][windows 10]].
 (defconst *is-a-mac* (eq system-type 'darwin))
@@ -417,6 +419,56 @@
 ;; indent with spaces instead of tabs for pep8 compatibility
 (setq tab-width 4)
 (setq-default indent-tabs-mode nil)
+
+
+
+;;## B
+
+
+;;### bibtex-mode related
+;; Fetch bibtex for the given DOI. Insert at point, which should be in your global.bib file.
+;; Needs code to reformat the bibtex key.
+;;
+;; https://www.anghyflawn.net/blog/2014/emacs-give-a-doi-get-a-bibtex-entry/
+
+(defun get-bibtex-from-doi (doi)
+ "Get a BibTeX entry from the DOI"
+ (interactive "MDOI: ")
+ (let ((url-mime-accept-string "text/bibliography;style=bibtex"))
+   (with-current-buffer 
+     (url-retrieve-synchronously 
+       (format "http://dx.doi.org/%s" 
+       	(replace-regexp-in-string "http://dx.doi.org/" "" doi)))
+     (switch-to-buffer (current-buffer))
+     (goto-char (point-max))
+     (setq bibtex-entry 
+     	  (buffer-substring 
+          	(string-match "@" (buffer-string))
+              (point)))
+     (kill-buffer (current-buffer))))
+ (insert (decode-coding-string bibtex-entry 'utf-8))
+ (define-key bibtex-mode-map (kbd "C-c b") 'get-bibtex-from-doi)
+ (bibtex-fill-entry))
+;; I want run the above function to define it upon entry into a Bibtex file. 
+(add-hook
+   'bibtex-mode-hook
+   (lambda ()
+       (get-bibtex-from-doi nil)))
+
+;; Hook to add imenu to menubar in bibtex mode
+;; http://www.jonathanleroux.org/bibtex-mode.html
+(add-hook
+  'bibtex-mode-hook
+  (lambda ()
+    (imenu-add-to-menubar "Imenu")))
+
+
+;;## Dired related
+(use-package dired-subtree :ensure t
+  :after dired
+  :config
+  (bind-key "<tab>" #'dired-subtree-toggle dired-mode-map)
+  (bind-key "<backtab>" #'dired-subtree-cycle dired-mode-map))
 
 
 ;;## E
@@ -792,6 +844,208 @@
 
 ;;## O
 
+;; <<<<<<< BEGINNING of org-agenda >>>>>>>>>>>>>>
+
+(define-key global-map "\C-ca" 'org-agenda)
+(setq org-log-done t)
+;; org-capture
+(define-key global-map "\C-cc" 'org-capture)
+(define-key global-map "\C-cl" 'org-store-link)
+
+(setq org-agenda-files '("/Users/blaine/gtd/tasks/JournalArticles.org"
+ "/Users/blaine/gtd/tasks/Proposals.org"
+ "/Users/blaine/gtd/tasks/Books.org"
+ "/Users/blaine/gtd/tasks/Talks.org"
+ "/Users/blaine/gtd/tasks/Posters.org"
+ "/Users/blaine/gtd/tasks/ManuscriptReviews.org"
+ "/Users/blaine/gtd/tasks/Private.org"
+ "/Users/blaine/gtd/tasks/Service.org"
+ "/Users/blaine/gtd/tasks/Teaching.org"
+ "/Users/blaine/gtd/tasks/Workshops.org"))
+
+;; Cycle through these keywords with shift right or left arrows.
+(setq org-todo-keywords
+        '((sequence "TODO(t)" "INITIATED(i!)" "WAITING(w!)" "CAL(a)" "SOMEDAY(s!)" "PROJ(j)" "|" "DONE(d!)" "CANCELLED(c!)")))
+
+(setq org-refile-targets '(("/Users/blaine/gtd/tasks/JournalArticles.org" :maxlevel . 2)
+   ("/Users/blaine/gtd/tasks/Proposals.org" :maxlevel . 2)
+   ("/Users/blaine/gtd/tasks/Books.org" :maxlevel . 2)
+   ("/Users/blaine/gtd/tasks/Talks.org" :maxlevel . 2)
+   ("/Users/blaine/gtd/tasks/Posters.org" :maxlevel . 2)
+   ("/Users/blaine/gtd/tasks/ManuscriptReviews.org" :maxlevel . 2)
+   ("/Users/blaine/gtd/tasks/Private.org" :maxlevel . 2)
+   ("/Users/blaine/gtd/tasks/Service.org" :maxlevel . 2)
+   ("/Users/blaine/gtd/tasks/Teaching.org" :maxlevel . 2)
+   ("/Users/blaine/gtd/tasks/Workshops.org" :maxlevel . 2)))
+(setq org-refile-use-outline-path 'file)
+
+;; ***** customized agenda views
+;; 
+;; These are my customized agenda views by project.
+;; The letter is the last parameter.
+;; For example, enter ~C-c a b~ and then enter 402 at the prompt to list all active tasks related to 402 tasks.
+;; 
+;; I learned about this approach [[https://tlestang.github.io/blog/keeping-track-of-tasks-and-projects-using-emacs-and-org-mode.html][here]].
+;; 
+;; The CATEGORY keyword resides inside of a Properties drawer.
+;; The drawers are usually closed.
+;; I am having trouble opening my drawers in may org files.
+;; In addition, I do not want to have to add a drawer to each TODO.
+;; 
+;; I am loving Tags now.
+;; I may switch to using Tags because they are visible in org files.
+;; I tried and they are not leading to the expect list of TODOs in org-agenda.
+;; I am stumped.
+;; 
+;; In the meantime, enter ~C-c \~ inside JournalArticles.org to narrow the focus to the list of TODOs or enter ~C-c i b~ to get an indirect buffer.
+;; 
+
+(setq org-agenda-custom-commands
+      '(
+	("b"
+             "List of all active 402 tasks."
+             tags-todo
+             "402\"/TODO|INITIATED|WAITING")
+	("c"
+             "List of all active 523 RNA-drug crystallization review paper tasks."
+             tags-todo
+             "CATEGORY=\"523\"/TODO|INITIATED|WAITING")
+	("d"
+             "List of all active 485PyMOLscGUI tasks."
+             tags-todo
+             "CATEGORY=\"485\"/TODO|INITIATED|WAITING")
+	("e"
+             "List of all active 2104 Emacs tasks"
+             tags-todo
+             "2104+CATEGORY=\"2104\"/NEXT|TODO|INITIATED|WAITING")
+	("n"
+             "List of all active 651 ENAX2 tasks"
+             tags-todo
+             "651+CATEGORY=\"651\"/NEXT|TODO|INITIATED|WAITING")
+	("q"
+             "List of all active 561 charge density review"
+             tags
+             "561+CATEGORY=\"211\"/NEXT|TODO|INITIATED|WAITING")
+	("r"
+             "List of all active 211 rcl/dnph tasks"
+             tags-todo
+             "211+CATEGORY=\"211\"/NEXT|TODO|INITIATED|WAITING")
+	("P"
+         "List of all projects"
+         tags
+         "LEVEL=2/PROJ")))
+
+
+;; I usually know the project to which I want to assign a task.
+;; I loathe having to come back latter to refile my tasks.
+;; I want to do the filing at the time of capture.
+;; I found a solution [[https://stackoverflow.com/questions/9005843/interactively-enter-headline-under-which-to-place-an-entry-using-capture][here]].
+;; 
+;; A project has two or more tasks.
+;; I believe that the 10,000 projects is the upper limit for a 30 year academic career.
+;; There are about 10,000 workdays in a 30 year career if you work six days a week.
+;; Of course, most academics work seven a week and many work longer than 30 years, some even reach 60 years.
+;; 
+;; I have my projects split into ten org files.
+;; Each org file has a limit of 1000 projects for ease of scrolling.
+;; 
+;; It is best to let Emacs insert new task because it is easy to accidently delete sectons in an org file, especially when sections are folded.
+;; (I know that many love folded sections.
+;; There is a strong appeal to being able to collapse secitons of text.
+;; However, folded section are not for me; I have experienced too many catastrophes.
+;; I open all of my org files with all sections fully open.
+;; I can use swiper to navigate if I do not want to scroll.)
+;; Enter ~C-c c~ to start the capture menu.
+;; The settings below show a single letter option for selecting the appropriate org-file.
+;; After entering the single-letter code, you are prompted for the headline name.
+;; You do not have to include the TODO keyword.
+;; However, I changed "Headline" to "Tag" because I have the project ID was one of the tags on the same line as the project headline.
+;; I am now prompted for the tag.
+;; After entering the tag, I fill out the task entry.
+;; I then enter ~C-c C-c~ to save the capture.
+;; 
+;;This protocol can be executed from inside the target org file or from a different buffer.
+;;
+;;I learned about the following function, which I modified by changing "Headline " to "Tag", from
+;;[[https://stackoverflow.com/questions/9005843/interactively-enter-headline-under-which-to-place-an-entry-using-capture][Lionel Henry]] with the modification by Phil on July 1, 2018.
+;;
+(defun org-ask-location ()
+  (let* ((org-refile-targets '((nil :maxlevel . 9)))
+         (hd (condition-case nil
+                 (car (org-refile-get-location "Tag" nil t))
+               (error (car org-refile-history)))))
+    (goto-char (point-min))
+    (outline-next-heading)
+    (if (re-search-forward
+         (format org-complex-heading-regexp-format (regexp-quote hd))
+         nil t)
+        (goto-char (point-at-bol))
+      (goto-char (point-max))
+      (or (bolp) (insert "\n"))
+      (insert "* " hd "\n")))
+  (end-of-line))
+
+(setq org-capture-templates
+ '(
+   ("j" "JournalArticles" entry
+    (file+function "/Users/blaine/gtd/tasks/JournalArticles.org" org-ask-location)
+    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
+    :empty-lines 1)
+    ("g" "GrantProposals" entry
+    (file+function "/Users/blaine/gtd/tasks/Proposals.org" org-ask-location)
+    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
+    :empty-lines 1)
+    ("b" "Books" entry
+    (file+function "/Users/blaine/gtd/tasks/Books.org" org-ask-location)
+    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
+    :empty-lines 1)
+    ("t" "Talks" entry
+    (file+function "/Users/blaine/gtd/tasks/Talks.org" org-ask-location)
+    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
+    :empty-lines 1)
+    ("p" "Posters" entry
+    (file+function "/Users/blaine/gtd/tasks/Posters.org" org-ask-location)
+    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
+    :empty-lines 1)
+    ("r" "ManuscriptReviews" entry
+    (file+function "/Users/blaine/gtd/tasks/ManuscriptReviews.org" org-ask-location)
+    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
+    :empty-lines 1)
+    ("v" "Private" entry
+    (file+function "/Users/blaine/gtd/tasks/Private.org" org-ask-location)
+    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
+    :empty-lines 1)
+    ("S" "Service" entry
+    (file+function "/Users/blaine/gtd/tasks/Service.org" org-ask-location)
+    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
+    :empty-lines 1)
+    ("T" "Teaching" entry
+    (file+function "/Users/blaine/gtd/tasks/Teaching.org" org-ask-location)
+    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
+    :empty-lines 1)
+    ("w" "Workshop" entry
+    (file+function "/Users/blaine/gtd/tasks/Workshops.org" org-ask-location)
+    "\n\n*** TODO %?\n<%<%Y-%m-%d %a %T>>"
+    :empty-lines 1)
+    ("s" "Slipbox" entry  (file "/User/org-roam/inbox.org")
+           "* %?\n")
+    ))
+
+
+(defun jethro/org-capture-slipbox ()
+    (interactive)
+    (org-capture nil "s"))
+
+
+
+
+
+
+
+
+;; <<<<<<< END of org-agenda >>>>>>>>>>>>>>
+
+
 ;; org-drill for spaced repetition learning in org-mode
 ;; You have to install org-drill from MELPA.;; This is a YouTube video about how to use org-drill[[https://www.youtube.com/watch?v=uraPXeLfWcM][to learn Chinese]].
 ;;You can use org tables to generate [[https://github.com/chrisbarrett/org-drill-table][flashcards]].
@@ -808,9 +1062,7 @@
 )
 
 
-
-
-;; Basic org-roam config
+;;## Basic org-roam config
 (use-package org-roam
   :ensure t
   :custom
@@ -830,7 +1082,77 @@
   (require 'org-roam-protocol))
 
 
-  (use-package org-roam-bibtex
+
+;;## Basic org-roam config
+;; Following https://jethrokuan.github.io/org-roam-guide/
+
+(setq org-roam-capture-templates
+      '(("m" "main" plain
+         "%?"
+         :if-new (file+head "main/${slug}.org"
+                            "#+title: ${title}\n")
+         :immediate-finish t
+         :unnarrowed t)
+        ("r" "reference" plain "%?"
+         :if-new
+         (file+head "reference/${title}.org" "#+title: ${title}\n")
+         :immediate-finish t
+         :unnarrowed t)
+        ("a" "article" plain "%?"
+         :if-new
+         (file+head "articles/${title}.org" "#+title: ${title}\n#+filetags: :article:\n")
+         :immediate-finish t
+         :unnarrowed t)))
+
+
+(setq org-roam-node-display-template
+    (concat "${type:15} ${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+
+
+(defun jethro/org-roam-node-from-cite (keys-entries)
+    (interactive (list (citar-select-ref :multiple nil :rebuild-cache t)))
+    (let ((title (citar--format-entry-no-widths (cdr keys-entries)
+                                                "${author editor} :: ${title}")))
+      (org-roam-capture- :templates
+                         '(("r" "reference" plain "%?" :if-new
+                            (file+head "reference/${citekey}.org"
+                                       ":PROPERTIES:
+:ROAM_REFS: [cite:@${citekey}]
+:END:
+#+title: ${title}\n")
+                            :immediate-finish t
+                            :unnarrowed t))
+                         :info (list :citekey (car keys-entries))
+                         :node (org-roam-node-create :title title)
+                         :props '(:finalize find-file))))
+
+
+(defun jethro/tag-new-node-as-draft ()
+  (org-roam-tag-add '("draft")))
+(add-hook 'org-roam-capture-new-node-hook #'jethro/tag-new-node-as-draft)
+
+
+;; ;;### Create the property “type” on my nodes.
+;; 
+;; (cl-defmethod org-roam-node-type ((node org-roam-node))
+;;   "Return the TYPE of NODE."
+;;   (condition-case nil
+;;       (file-name-nondirectory
+;;        (directory-file-name
+;;         (file-name-directory
+;;          (file-relative-name (org-roam-node-file node) org-roam-directory))))
+;;     (error "")))
+
+
+;; (setq org-roam-node-display-template
+;;           (concat "${type:15} ${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+
+
+
+
+;;### org-roam-bibtex config
+
+(use-package org-roam-bibtex
       :hook (org-roam-mode . org-roam-bibtex-mode))
 
     (setq orb-preformat-keywords
@@ -856,6 +1178,11 @@
   :END:")))
 
 
+
+
+
+
+
 ;;## P
 
 ;;###  Move to cursor to previously visited window
@@ -868,9 +1195,28 @@
 (global-set-key "\C-xp" 'other-window-backward)
 
 
+;;###  pdb-tools
+
+;;Marcin Magnus's updated fork of pdb-tools by Charlie Bond and David Love.
+;;[[https://github.com/mmagnus/emacs-pdb-mode][Gitub repo]]]
+
+
+;; pdb.el
+(load-file "~/.emacs.default/plugins/emacs-pdb-mode/pdb-mode.el")
+(setq pdb-rasmol-name "/Applications/PyMOL.app/Contents/bin/pymol")
+(setq auto-mode-alist
+     (cons (cons "pdb$" 'pdb-mode)
+           auto-mode-alist ) )
+(autoload 'pdb-mode "PDB")
+
+
+
+
 ;;### pdf-tools
 
 ;; This is an alternative to the built-in DocView package.
+;; I allows smooth scrolling and it superior in general.
+;; I could load several PDFs, including 500 pages books.
 ;; 
 ;; 
 ;; The pdf-tools package runs on top of pdf-view package.
@@ -883,9 +1229,8 @@
 ;; Enter ~C-c C-a t~ to enter text notes.
 ;; Enter the note and enter ~C-c C-c~ to save.
 ;; Right-click the mouse to get a menu of more options.
+
 ;; 
-;; 
-;; #+BEGIN_SRC emacs-lisp
 ;; (use-package pdf-tools
 ;;   :pin manual ;; manually update
 ;;   :config
@@ -902,8 +1247,9 @@
 ;;   (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward))
 ;;   ;; Setting for sharper images with Macs with Retina displays
 ;;   (setq pdf-view-use-scaling t)
-;; #+END_SRC
-;; 
+
+
+
 ;; **** Useful keybindings for viewing PDFs
 ;; |------------------------------------------+-----------------|
 ;; | Display                                  |                 |
@@ -938,11 +1284,6 @@
 ;; | Store position / Jump to position in register | ~m~ / ~'~             |
 ;; |-----------------------------------------------+-----------------------|
 ;; 
-
-
-
-
-
 
 
 
@@ -989,7 +1330,7 @@
  '(ac-menu-height 15)
  '(ivy-height 20)
  '(package-selected-packages
-   '(org-roam-timestamps org-roam-bibtex org-roam-ui org-roam org-preview-html impatient-mode ef-themes yasnippet wc-mode use-package rainbow-delimiters powerline maxframe material-theme exec-path-from-shell electric-spacing better-defaults auto-complete auctex atomic-chrome)))
+   '(org-pdftools multiple-cursors 0blayout dired-subtree org-roam-timestamps org-roam-bibtex org-roam-ui org-roam org-preview-html impatient-mode ef-themes yasnippet wc-mode use-package rainbow-delimiters powerline maxframe material-theme exec-path-from-shell electric-spacing better-defaults auto-complete auctex atomic-chrome)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
