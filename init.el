@@ -49,6 +49,8 @@
 	(maximize-frame)))
 ;; (global-set-key (kbd "M-RET") 'toggle-frame-fullscreen) ;; conflicts with an auctex command to insert an \item in a list.
 
+;;### Turn on font-locking or syntax highlighting
+(global-font-lock-mode t)
 
 ;;### font size in the modeline
 (set-face-attribute 'mode-line nil  :height 240)
@@ -74,7 +76,14 @@
 ;; (add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
 
 
- 
+;; dired-icon-mode
+
+(add-hook 'dired-mode-hook 'dired-icon-mode)
+
+;; replace dired with dirvish
+(dirvish-override-dired-mode)
+
+
 ;; Revert Dired and other buffers after changes to files in directories on disk.
 ;; Source: [[https://www.youtube.com/watch?v=51eSeqcaikM&list=PLEoMzSkcN8oNmd98m_6FoaJseUsa6QGm2&index=2][Dave Wilson]]
 (setq global-auto-revert-non-file-buffers t)
@@ -128,7 +137,14 @@
 (setq mac-command-modifier 'meta) ; make cmd key do Meta
 (setq mac-option-modifier 'super) ; make option key do Super. 
 (setq mac-control-modifier 'control) ; make Control key do Control
-(setq ns-function-modifier 'hyper)  ; make Fn key do Hyper  
+(setq mac-function-modifier 'hyper)  ; make Fn key do Hyper. Only works on Apple produced keyboards.  
+(setq mac-right-command-modifier 'hyper)
+
+
+;; Switch to previous buffer
+(define-key global-map (kbd "s-<left>") 'previous-buffer)
+;; Switch to next buffer
+(define-key global-map (kbd "s-<right>") 'next-buffer)
 
 
 ;; Minibuffer history keybindings
@@ -144,7 +160,7 @@
 
 
 ;; Bibtex configuration
-(defconst blaine/bib-libraries (list "~/Documents/global.bib")) 
+(defconst blaine/bib-libraries (list "/Users/blaine/Documents/global.bib")) 
 
 ;; Combined with emacs-mac, this gives good PDF quality for [[https://www.aidanscannell.com/post/setting-up-an-emacs-playground-on-mac/][retina display]].
 (setq pdf-view-use-scaling t)
@@ -593,6 +609,27 @@
 
 ;;## L
 
+
+;;### LanguageTool
+
+(use-package languagetool
+  :ensure t
+  :defer t
+  :commands (languagetool-check
+             languagetool-clear-suggestions
+             languagetool-correct-at-point
+             languagetool-correct-buffer
+             languagetool-set-language
+             languagetool-server-mode
+             languagetool-server-start
+             languagetool-server-stop)
+  :config
+  (setq languagetool-java-arguments '("-Dfile.encoding=UTF-8")
+        languagetool-console-command "~/.languagetool/languagetool-commandline.jar"
+        languagetool-server-command "~/.languagetool/languagetool-server.jar"))
+
+
+
 ;;### LaTeX helpher functions
 ;;#### M-x description
 ;; Converts a selected list into a description list.
@@ -852,6 +889,8 @@
 (define-key global-map "\C-cc" 'org-capture)
 (define-key global-map "\C-cl" 'org-store-link)
 
+(setq org-columns-default-format "%50ITEM(Task) %10CLOCKSUM %16TIMESTAMP_IA")
+
 (setq org-agenda-files '("/Users/blaine/gtd/tasks/JournalArticles.org"
  "/Users/blaine/gtd/tasks/Proposals.org"
  "/Users/blaine/gtd/tasks/Books.org"
@@ -1037,12 +1076,6 @@
     (org-capture nil "s"))
 
 
-
-
-
-
-
-
 ;; <<<<<<< END of org-agenda >>>>>>>>>>>>>>
 
 
@@ -1061,6 +1094,70 @@
              )
 )
 
+
+(use-package org-pomodoro
+    :ensure t
+    :commands (org-pomodoro)
+    :config
+    (setq alert-user-configuration (quote ((((:category . "org-pomodoro")) libnotify nil)))))
+
+;; (use-package sound-wav)
+;; (setq org-pomodoro-ticking-sound-p nil)
+;; ; (setq org-pomodoro-ticking-sound-states '(:pomodoro :short-break :long-break))
+;; (setq org-pomodoro-ticking-sound-states '(:pomodoro))
+;; (setq org-pomodoro-ticking-frequency 1)
+;; (setq org-pomodoro-audio-player "mplayer")
+;; (setq org-pomodoro-finished-sound-args "-volume 0.9")
+;; (setq org-pomodoro-long-break-sound-args "-volume 0.9")
+;; (setq org-pomodoro-short-break-sound-args "-volume 0.9")
+;; (setq org-pomodoro-ticking-sound-args "-volume 0.3")
+
+(global-set-key (kbd "C-c o") 'org-pomodoro)
+
+
+
+;; <<<<<<< BEGIN org-ref >>>>>>>>>>>>>>
+(require 'org-ref)
+(require 'org-ref-ivy)
+(require 'bibtex)
+
+(setq bibtex-completion-bibliography '("/Users/blaine/Documents/global.bib")
+	bibtex-completion-library-path '("/Users/blaine/0papersLabeled/")
+	bibtex-completion-notes-path "/Users/blaine/Documents/notes/"
+	bibtex-completion-notes-template-multiple-files "* ${author-or-editor}, ${title}, ${journal}, (${year}) :${=type=}: \n\nSee [[cite:&${=key=}]]\n"
+	bibtex-completion-additional-search-fields '(keywords)
+	bibtex-completion-display-formats
+	'((article       . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${journal:40}")
+	  (inbook        . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} Chapter ${chapter:32}")
+	  (incollection  . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+	  (inproceedings . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+	  (t             . "${=has-pdf=:1}${=has-note=:1} ${year:4} ${author:36} ${title:*}"))
+	bibtex-completion-pdf-open-function
+	(lambda (fpath)
+	  (call-process "open" nil 0 nil fpath)))
+      
+(setq bibtex-autokey-year-length 4
+      bibtex-autokey-name-year-separator "-"
+      bibtex-autokey-year-title-separator "-"
+      bibtex-autokey-titleword-separator "-"
+      bibtex-autokey-titlewords 2
+      bibtex-autokey-titlewords-stretch 1
+      bibtex-autokey-titleword-length 5)
+
+;; H is the hyper key. I have bound H to Fn. For the MacAlly keyboard, it is bound to right-command.
+(define-key bibtex-mode-map (kbd "H-b") 'org-ref-bibtex-hydra/body)
+(define-key org-mode-map (kbd "H-c") org-ref-insert-cite-function)
+(define-key org-mode-map (kbd "H-r") org-ref-insert-ref-function)
+(define-key org-mode-map (kbd "H-l") org-ref-insert-label-function)
+(define-key org-mode-map (kbd "H-d") 'doi-add-bibtex-entry)
+
+
+;; <<<<<<< END org-ref >>>>>>>>>>>>>>
+
+
+
+
+;; <<<<<<< BEGIN org-roam >>>>>>>>>>>>>>
 
 ;;## Basic org-roam config
 (use-package org-roam
@@ -1177,12 +1274,50 @@
   :NOTER_PAGE:
   :END:")))
 
+;; <<<<<<< END org-roam >>>>>>>>>>>>>>
 
 
+;; <<<<<<< BEGIN org-tree-to-indirect-buffer >>>>>>>>>>>>>>
 
+;; 
+;; This function address the shortcoming of org-tree-to-indirect-buffer which is that there can only be one such indirect buffer per Org mode file.
+;; [[https://www.reddit.com/r/orgmode/comments/dbsngi/comment/f26qpzr/][Source]].
+;; Its purpose is to provide more than one indirect buffer when using org-tree-to-indirect-buffer() (via C-c C-x b).
+;; This latter function is built-in.
+;; Repeating C-c C-x b will drill down to the lowest headline level.
 
+(defun my-org-tree-to-indirect-buffer (&optional arg)
+  "Create indirect buffer and narrow it to current subtree.
+The buffer is named after the subtree heading, with the filename
+appended.  If a buffer by that name already exists, it is
+selected instead of creating a new buffer."
+  (interactive "P")
+  (let* ((new-buffer-p)
+         (pos (point))
+         (buffer-name (let* ((heading (org-get-heading t t))
+                             (level (org-outline-level))
+                             (face (intern (concat "outline-" (number-to-string level))))
+                             (heading-string (propertize (org-link-display-format heading)
+                                                         'face face)))
+                        (concat heading-string "::" (buffer-name))))
+         (new-buffer (or (get-buffer buffer-name)
+                         (prog1 (condition-case nil
+                                    (make-indirect-buffer (current-buffer) buffer-name 'clone)
+                                  (error (make-indirect-buffer (current-buffer) buffer-name)))
+                           (setq new-buffer-p t)))))
+    (switch-to-buffer new-buffer)
+    (when new-buffer-p
+      ;; I don't understand why setting the point again is necessary, but it is.
+      (goto-char pos)
+      (rename-buffer buffer-name)
+      (org-narrow-to-subtree))))
 
+(advice-add 'org-tree-to-indirect-buffer :override 'my-org-tree-to-indirect-buffer)
+(global-set-key (kbd "C-c i b") 'my-org-tree-to-indirect-buffer)
 
+;; Note: a similar effect is had using a tag via (e.g., C-c \ m and enter tag at the prompt in the minibuffer).
+
+;; <<<<<<< END org-roam >>>>>>>>>>>>>>
 ;;## P
 
 ;;###  Move to cursor to previously visited window
@@ -1230,23 +1365,23 @@
 ;; Enter the note and enter ~C-c C-c~ to save.
 ;; Right-click the mouse to get a menu of more options.
 
-;; 
-;; (use-package pdf-tools
-;;   :pin manual ;; manually update
-;;   :config
-;;   ;; initialise
-;;   (pdf-tools-install)
-;; 
-;;   ;; This means that pdfs are fitted to width by default when you open them
-;;   (setq-default pdf-view-display-size 'fit-width)
-;;   ;; open pdfs scaled to fit page
-;;   ;;  (setq-default pdf-view-display-size 'fit-page)
-;;    ;; automatically annotate highlights
-;;   (setq pdf-annot-activate-created-annotations t)
-;;   ;; use normal isearch
-;;   (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward))
-;;   ;; Setting for sharper images with Macs with Retina displays
-;;   (setq pdf-view-use-scaling t)
+
+(use-package pdf-tools
+  ;;:pin manual ;; manually update
+  :config
+  ;; initialise
+  (pdf-tools-install)
+
+  ;; This means that pdfs are fitted to width by default when you open them
+  (setq-default pdf-view-display-size 'fit-width)
+  ;; open pdfs scaled to fit page
+  ;;  (setq-default pdf-view-display-size 'fit-page)
+   ;; automatically annotate highlights
+  (setq pdf-annot-activate-created-annotations t)
+  ;; use normal isearch
+  (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward))
+  ;; Setting for sharper images with Macs with Retina displays
+  (setq pdf-view-use-scaling t)
 
 
 
@@ -1322,6 +1457,8 @@
 (add-hook 'text-mode-hook 'wc-mode)
 ;; Suggested setting
 (global-set-key "\C-cw" 'wc-mode)
+
+;;### Do NOT MESS with the code below
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -1329,8 +1466,11 @@
  ;; If there is more than one, they won't work right.
  '(ac-menu-height 15)
  '(ivy-height 20)
+ '(org-agenda-files
+   '("~/430PSADwaveOpt/430gh/main.org" "/Users/blaine/gtd/tasks/JournalArticles.org" "/Users/blaine/gtd/tasks/Proposals.org" "/Users/blaine/gtd/tasks/Books.org" "/Users/blaine/gtd/tasks/Talks.org" "/Users/blaine/gtd/tasks/Posters.org" "/Users/blaine/gtd/tasks/ManuscriptReviews.org" "/Users/blaine/gtd/tasks/Private.org" "/Users/blaine/gtd/tasks/Service.org" "/Users/blaine/gtd/tasks/Teaching.org" "/Users/blaine/gtd/tasks/Workshops.org"))
  '(package-selected-packages
-   '(org-pdftools multiple-cursors 0blayout dired-subtree org-roam-timestamps org-roam-bibtex org-roam-ui org-roam org-preview-html impatient-mode ef-themes yasnippet wc-mode use-package rainbow-delimiters powerline maxframe material-theme exec-path-from-shell electric-spacing better-defaults auto-complete auctex atomic-chrome)))
+   '(languagetool org-ref org-pomodoro pdf-tools dirvish dired-icon 0xc org-pdftools multiple-cursors 0blayout dired-subtree org-roam-timestamps org-roam-bibtex org-roam-ui org-roam org-preview-html impatient-mode ef-themes yasnippet wc-mode use-package rainbow-delimiters powerline maxframe material-theme exec-path-from-shell electric-spacing better-defaults auto-complete auctex atomic-chrome))
+ '(warning-suppress-log-types '(((tar link)))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
