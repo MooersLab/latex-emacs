@@ -612,6 +612,10 @@
 
 ;;### LanguageTool
 
+;; I downloaded Language Tool and installed it in ~/.languagetool.
+;; source: https://github.com/PillFall/languagetool.el
+
+
 (use-package languagetool
   :ensure t
   :defer t
@@ -628,7 +632,10 @@
         languagetool-console-command "~/.languagetool/languagetool-commandline.jar"
         languagetool-server-command "~/.languagetool/languagetool-server.jar"))
 
+(setq languagetool-java-arguments '("-Dfile.encoding=UTF-8"))
 
+(setq languagetool-console-command "~/.languagetool/languagetool-commandline.jar"
+      languagetool-server-command "~/.languagetool/languagetool-server.jar")
 
 ;;### LaTeX helpher functions
 ;;#### M-x description
@@ -882,6 +889,9 @@
 ;;## O
 
 ;; <<<<<<< BEGINNING of org-agenda >>>>>>>>>>>>>>
+(setq org-agenda-start-with-log-mode t)
+(setq org-log-done 'time)
+(setq org-log-into-drawer t)
 
 (define-key global-map "\C-ca" 'org-agenda)
 (setq org-log-done t)
@@ -900,7 +910,8 @@
  "/Users/blaine/gtd/tasks/Private.org"
  "/Users/blaine/gtd/tasks/Service.org"
  "/Users/blaine/gtd/tasks/Teaching.org"
- "/Users/blaine/gtd/tasks/Workshops.org"))
+ "/Users/blaine/gtd/tasks/Workshops.org"
+ "/Users/blaine/gtd/tasks/grasscatchers.org"))
 
 ;; Cycle through these keywords with shift right or left arrows.
 (setq org-todo-keywords
@@ -915,6 +926,7 @@
    ("/Users/blaine/gtd/tasks/Private.org" :maxlevel . 2)
    ("/Users/blaine/gtd/tasks/Service.org" :maxlevel . 2)
    ("/Users/blaine/gtd/tasks/Teaching.org" :maxlevel . 2)
+   ("/Users/blaine/gtd/tasks/grasscatcer.org" :maxlevel . 2)
    ("/Users/blaine/gtd/tasks/Workshops.org" :maxlevel . 2)))
 (setq org-refile-use-outline-path 'file)
 
@@ -1277,47 +1289,9 @@
 ;; <<<<<<< END org-roam >>>>>>>>>>>>>>
 
 
-;; <<<<<<< BEGIN org-tree-to-indirect-buffer >>>>>>>>>>>>>>
 
-;; 
-;; This function address the shortcoming of org-tree-to-indirect-buffer which is that there can only be one such indirect buffer per Org mode file.
-;; [[https://www.reddit.com/r/orgmode/comments/dbsngi/comment/f26qpzr/][Source]].
-;; Its purpose is to provide more than one indirect buffer when using org-tree-to-indirect-buffer() (via C-c C-x b).
-;; This latter function is built-in.
-;; Repeating C-c C-x b will drill down to the lowest headline level.
 
-(defun my-org-tree-to-indirect-buffer (&optional arg)
-  "Create indirect buffer and narrow it to current subtree.
-The buffer is named after the subtree heading, with the filename
-appended.  If a buffer by that name already exists, it is
-selected instead of creating a new buffer."
-  (interactive "P")
-  (let* ((new-buffer-p)
-         (pos (point))
-         (buffer-name (let* ((heading (org-get-heading t t))
-                             (level (org-outline-level))
-                             (face (intern (concat "outline-" (number-to-string level))))
-                             (heading-string (propertize (org-link-display-format heading)
-                                                         'face face)))
-                        (concat heading-string "::" (buffer-name))))
-         (new-buffer (or (get-buffer buffer-name)
-                         (prog1 (condition-case nil
-                                    (make-indirect-buffer (current-buffer) buffer-name 'clone)
-                                  (error (make-indirect-buffer (current-buffer) buffer-name)))
-                           (setq new-buffer-p t)))))
-    (switch-to-buffer new-buffer)
-    (when new-buffer-p
-      ;; I don't understand why setting the point again is necessary, but it is.
-      (goto-char pos)
-      (rename-buffer buffer-name)
-      (org-narrow-to-subtree))))
 
-(advice-add 'org-tree-to-indirect-buffer :override 'my-org-tree-to-indirect-buffer)
-(global-set-key (kbd "C-c i b") 'my-org-tree-to-indirect-buffer)
-
-;; Note: a similar effect is had using a tag via (e.g., C-c \ m and enter tag at the prompt in the minibuffer).
-
-;; <<<<<<< END org-roam >>>>>>>>>>>>>>
 ;;## P
 
 ;;###  Move to cursor to previously visited window
@@ -1421,7 +1395,112 @@ selected instead of creating a new buffer."
 ;; 
 
 
+;;## S
 
+
+;;### Straight
+;; Install straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+
+;;### pdf-drop-mode
+(straight-use-package
+  '(pdf-drop-mode :type git :host github :repo "rougier/pdf-drop-mode"))
+
+
+(require 'pdf-drop-mode)
+
+(defun my/pdf-process (file doi)
+  (message "%s : %s" file doi))
+
+(setq pdf-drop-search-hook #'my/pdf-process)
+(pdf-drop-mode)
+
+
+
+
+
+
+;;### Swiper related confg from https://github.com/zamansky/using-emacs/blob/lesson-6-swiper/init.el
+(use-package try
+	:ensure t)
+
+(use-package which-key
+	:ensure t 
+	:config
+	(which-key-mode))
+
+
+;; Org-mode stuff
+(use-package org-bullets
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
+(ido-mode 1)
+
+(defalias 'list-buffers 'ibuffer)
+;; (defalias 'list-buffers 'ibuffer-other-window)
+
+; If you like a tabbar 
+;(use-package tabbar
+;  :ensure t
+;  :config
+;  (tabbar-mode 1))
+
+
+(use-package ace-window
+  :ensure t
+  :init
+  (progn
+    (global-set-key [remap other-window] 'ace-window)
+    (custom-set-faces
+     '(aw-leading-char-face
+       ((t (:inherit ace-jump-face-foreground :height 3.0))))) 
+    ))
+
+
+;; it looks like counsel is a requirement for swiper
+(use-package counsel
+  :ensure t
+  )
+
+(use-package swiper
+  :ensure try
+  :config
+  (progn
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers t)
+    (global-set-key "\C-s" 'swiper)
+    (global-set-key (kbd "C-c C-r") 'ivy-resume)
+    (global-set-key (kbd "<f6>") 'ivy-resume)
+    (global-set-key (kbd "M-x") 'counsel-M-x)
+    (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+    (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+    (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+    (global-set-key (kbd "<f1> l") 'counsel-load-library)
+    (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+    (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+    (global-set-key (kbd "C-c g") 'counsel-git)
+    (global-set-key (kbd "C-c j") 'counsel-git-grep)
+    (global-set-key (kbd "C-c k") 'counsel-ag)
+    (global-set-key (kbd "C-x l") 'counsel-locate)
+    (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
+    (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
+    ))
 
 
 
@@ -1469,14 +1548,19 @@ selected instead of creating a new buffer."
  '(org-agenda-files
    '("~/430PSADwaveOpt/430gh/main.org" "/Users/blaine/gtd/tasks/JournalArticles.org" "/Users/blaine/gtd/tasks/Proposals.org" "/Users/blaine/gtd/tasks/Books.org" "/Users/blaine/gtd/tasks/Talks.org" "/Users/blaine/gtd/tasks/Posters.org" "/Users/blaine/gtd/tasks/ManuscriptReviews.org" "/Users/blaine/gtd/tasks/Private.org" "/Users/blaine/gtd/tasks/Service.org" "/Users/blaine/gtd/tasks/Teaching.org" "/Users/blaine/gtd/tasks/Workshops.org"))
  '(package-selected-packages
-   '(languagetool org-ref org-pomodoro pdf-tools dirvish dired-icon 0xc org-pdftools multiple-cursors 0blayout dired-subtree org-roam-timestamps org-roam-bibtex org-roam-ui org-roam org-preview-html impatient-mode ef-themes yasnippet wc-mode use-package rainbow-delimiters powerline maxframe material-theme exec-path-from-shell electric-spacing better-defaults auto-complete auctex atomic-chrome))
+   '(counsel ace-window org-bullets which-key try languagetool org-ref org-pomodoro pdf-tools dirvish dired-icon 0xc org-pdftools multiple-cursors 0blayout dired-subtree org-roam-timestamps org-roam-bibtex org-roam-ui org-roam org-preview-html impatient-mode ef-themes yasnippet wc-mode use-package rainbow-delimiters powerline maxframe material-theme exec-path-from-shell electric-spacing better-defaults auto-complete auctex atomic-chrome))
  '(warning-suppress-log-types '(((tar link)))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0)))))
+
+
+ ;;### Tramp
+ ;; Set default connection mode to SSH
+ (setq tramp-default-method "ssh")
 
 
 ;;## Y 
