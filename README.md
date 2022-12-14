@@ -1,9 +1,23 @@
-# latex-emacs: a GNU Emacs profile for LaTeX
+# latex-emacs: a GNU Emacs profile for using LaTeX and Org in academic research
 ## Make writing tasks fun by disguising them as coding projects!
 
 This repo contains a init.el file (configuration file) for using LaTeX in GNU Emacs.
 You can adapt it to other configurations of Emacs (e.g., Spacemacs, Doom, etc).
 The SciMax configuration probably has similar support built-in.
+
+Short list of features include the following:
+
+* heavily customized auto-complete for LaTeX
+* AUCTeX
+* atomic-chrome (GhostText)
+* awesome-tabs (install from Github)
+* dashboard
+* org-mode
+* org-agenda
+* org-roam (capture templates include timestamps)
+* org-roam-ui
+* pdf-tools
+* pdf-noter
 
 I built the latex-emacs profile on top of a configuration by [Alvaro Ortiz Troncoso](https://github.com/aot29/Emacs_Python_R_LaTeX).
 His configuration included the auto-complete-auctex.el package of Chris Monsanto from 2012.
@@ -38,7 +52,7 @@ See the this [repo](https://github.com/MooersLab/manuscriptInOrg) for a manuscri
 See this [repo](https://github.com/MooersLab/writingLogTemplateInOrg) for a writing log to be used in parallel to writing a manuscript in org-mode. 
 
 I am keeping the *latex-emacs* configuration isolated from my main configuration to ease the development of  *latex-emacs* .
- The *latex-emacs*  profile also serves as a backup configuration when I break my main configuration, which happens less often these days.
+The *latex-emacs*  profile also serves as a backup configuration when I break my main configuration, which happens less often these days.
 
 I have used this init file with the [chemacs2](https://github.com/plexus/chemacs2) package and the `--with-profile` flag.
 If you have Emacs version 28.1 or earlier, you must use this option.
@@ -62,7 +76,9 @@ The use of this second flag does not require any configuration.
 This flag is available as of January 2022 with Emacs version 29.0.5.
 The bleeding edge builds of GNU Emacs can be found under the nightlies builds [here](https://emacsformacos.com/builds) for the Mac, even though the version number is not explicit in the name of these builds.
 These builds may have bugs, but I have not run into one in two years of using them.
-Unfortunately, this flag is not available for Emacs 28.1. 
+Unfortunately, this flag is not available for Emacs 28.2. 
+
+(Note: as of December 2022, I am using the bleeding edge Emacs 30.5. There are no issues so far.)
 
 No warranty is implied. Use at your own risk.
 
@@ -135,33 +151,34 @@ The Pro license also enables the use of git to make copies of your writing proje
 ## Why not Org-mode
 
 Org-mode includes support for document preparation, time management, and literate programming.
-Many Emacs users in the past decade were drawn to Emacs by org-mode.
-Org documentations can recognize LaTeX markup.
-Exporting an org document through LaTeX to PDF is seamless.
-I like using org-mode.
+Many people in the past decade were drawn to Emacs by org-mode.
+Org documentats can recognize LaTeX markup.
+Exporting an org document through LaTeX to a PDF and having that PDF open in your default PDF-viewer is seamless.
+However, to be honest, Overleaf is even faster.
 
 The main drawbacks for me are as follows:
 
-- Most publishers do not accept org files, while they do accept text files.
+- Most publishers do not accept org files, while they do accept text files. (You can export the org file to a LaTeX file that might need heavy editing to get it accepted by the publisher.)
 - Overleaf does not support the use of org files. 
 - Org markup adds another layer of abstraction on top of LaTeX.
 
 I am already comfortable with LaTeX.
-I do not need the crutch of org to produce text files.
+I do not need the crutch of org to produce tex files.
 
 
 <a id="Features"><h2>Features:</h2></a>
 
 - Install packages from MELPA with use-package.
-- Uses Protesilaos Stavrou's (Prot's) [ef-themes](https://github.com/protesilaos/ef-themes) package, which I installed manually. 
+- Uses Protesilaos Stavrou's (Prot's) [ef-themes](https://github.com/protesilaos/ef-themes) package. Set to the ef-spring theme. The ef-light theme is good too.
 - latex-mode and auctex-mode with an old autocompletion package that works,
 - Keybindings remapped so Meta is `cmd`, Super is `cap locks`, and Hyper is `Fn` on the Mac.
 - Numerous keybindings from *outline-mode* to fold and unfold sections in a LaTeX file.
 - Configured to cope with the minted package under compiling. It gets around the `compile with -shell-escape` command.
-- Configured to use snippets from snippets.
+- Configured to use snippets from the *snippets* subfolder.
 - Has hippieexpand enabled.
 - Uses the *awesome-tabs* package to enable navigation between buffers via tabs. (I know, not good ergonomics.)
 - Has the word count mode (*wc-mode*) enabled.
+- Has pomodoro-mode.
 - Has minibuffer history.
 - Has *ivy* enabled for enhanced auto-completion selections.
 - *atomic-chrome* configured to interact with *GhostText* extension for Google Chrome so you can edit in Emacs LaTeX documents on Chrome.
@@ -178,7 +195,7 @@ I do not need the crutch of org to produce text files.
 2. Install Prot's ef-theme or comment out the corresponding code in init.el.
 3. Create link to your snippets folder:  `ln -s snippets ~/.emacs.d/snippets`
 4. Edit file paths in init.el as needed.
-5. Add `alias e28l='emacs --with-profile latex-emacs` to your `.bashrc` or `.zshrc` file so you can open Emacs with alias `e28l`. Or with Emacs version 29.1, add `alias e29l='emacs --init-directory ~/latex-emacs'`.
+5. Add `alias e28l='emacs --with-profile latex-emacs` to your `.bashrc` or `.zshrc` file so you can open Emacs with alias `e28l`. Or with Emacs version 29.0.5, add `alias e29l='emacs --init-directory ~/latex-emacs'`.
 6. Add the GhostText extension to Chrome.
 7. Install LaTeX and include in your PATH.
 8. Edit in init.el the file path to texcount. This Perl script comes with LaTeX. You might be able to invoke texcount without the file path if you have no previously defined aliases to do texcount.
@@ -210,7 +227,7 @@ These keybindings are active in the latex-mode or useful in this mode.
 |C-c C-s     | Enter to insert a section or subsection.|
 | C-c C-a    | Compile and open PDF in default viewer|
 |C-c C-c     | Compile document.|
-|C-c `       | Got to compile error.|
+|C-c `       | Go to compile error.|
 |C-c C-p C-s | Preview regions.|
 | C-c =      | Open navigable table of contents view of the document. |
 |C-c C-k     | Kill the text file processing.   |
@@ -266,9 +283,9 @@ If you are rusty or just starting to use Emacs, you need only these 23 key bindi
 
 Vim users can turn on evil-mode to emulate vim key-bindings.
 
-CUA keybindings (C-c, C-v, and C-x for copy, paste, and cut can be invoked by uncommenting the code in the init.el file).
+CUA keybindings (C-c, C-v, and C-x for copy, paste, and cut) can be invoked by uncommenting the code in the init.el file.
 However, there are conflicts with the latex keybindings.
-I recommend either using evil-mode or just buckle-down and learn the essential Emacs key bindings.
+I recommend either using evil-mode or learn the essential Emacs key bindings; they are much easier to master than they look :).
 
 
 ## Quizzes
@@ -293,3 +310,4 @@ The quizzes in a set have the same questions, but I randomized their order.
 - [Slides from talk about GhostText, Data Science Workshop, July 2022](https://github.com/MooersLab/DSW22ghosttext)
 - [Video link to talk about GhostText, Data Science Workshop, July 2022](https://mediasite.ouhsc.edu/Mediasite/Channel/python/watch/4da0872f028c4255ae12935655e911321d)
 - [The writer's law](https://github.com/MooersLab/thewriterslaw)
+- [Ghost]()
