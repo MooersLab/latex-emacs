@@ -65,6 +65,8 @@ Create a file called .emacs-profiles.el in your home directory.
 ```
 Launch Emacs with `emacs --with-profile latex`.
 
+
+
 I now use `--init-directory` flag pointed to the folder `latex-emacs`.
 Well, actually use this following bash alias: 
 
@@ -77,6 +79,22 @@ This flag is available as of January 2022 with Emacs version 29.0.5.
 The bleeding edge builds of GNU Emacs can be found under the nightlies builds [here](https://emacsformacos.com/builds) for the Mac, even though the version number is not explicit in the name of these builds.
 These builds may have bugs, but I have not run into one in two years of using them.
 Unfortunately, this flag is not available for Emacs 28.2. 
+
+## Multiple versions of Emacs on same computer
+
+You can have multiple versions of Emacs on your system; however, you will have to match the profiles to the Emacs version because the binaries in the elpa subfolder may not run with different versions of Emacs. 
+To run emacs 28.2, stable version of Emacs throughout most of 2022, I had to use my chemax setup.
+I copied my latex-emacs folder to latex-emacs28.
+I defined latex28 in the emacs.profiles.el file.
+I made the following bash alias to Emacs version 28.2 that uses the latex28 profile with the debug on:
+
+```bash
+alias e28ld='/Applications/Emacs28.2.app/Contents/MacOS/Emacs --with-profile latex28 --debug-init'
+```
+
+I then deleted the everything inside of the elpa subfolder.
+I just enter `e28ld` to launch.
+
 
 (Note: as of December 2022, I am using the bleeding edge Emacs 30.5. There are no issues so far.)
 
