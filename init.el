@@ -2,7 +2,12 @@
 (require 'package)
 
 (add-to-list 'package-archives
-       '("melpa" . "http://melpa.org/packages/") t)
+         '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives
+         '("melpa-stable" . "https://stable.melpa.org/packages/"))
+(add-to-list 'package-archives
+        '("org" . "http://orgmode.org/elpa/") t)  ;; for newest version of org mode
+
 
 (package-initialize)
 (when (not package-archive-contents)
@@ -17,6 +22,16 @@
 (unless (package-installed-p `material-theme) (package-install `material-theme))
 (unless (package-installed-p `auto-complete) (package-install `auto-complete))
 
+
+;; automate package updating. It is silly to do this manually.
+;; (use-package auto-package-update
+;;   :custom
+;;   (auto-package-update-interval 31)
+;;   (auto-package-update-delete-old-versions t)
+;;   (auto-package-update-prompt-before-update t)
+;;   (auto-package-update-show-preview t)
+;;   :config
+;;   (auto-package-update-maybe))
 
 ;; ##################################### BASIC CUSTOMIZATION ######################################
 (setq inhibit-startup-message t) ;; hide the startup message
@@ -53,18 +68,38 @@
 (global-font-lock-mode t)
 
 ;;### font size in the modeline
-(set-face-attribute 'mode-line nil  :height 240)
+(set-face-attribute 'mode-line nil  :height 140)
+
+;; set default coding of buffers
+(setq default-buffer-file-coding-system 'utf-8-unix)
+
+;; Switch from tabs to spaces for indentation
+;; Set the indentation level to 4.
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
 
 
-;;### hippie-expand
+;;### hippie-expand M-/
 (global-set-key [remap dabbrev-expand]  'hippie-expand)
 
 
-; ;; Set copy+paste
-;  (cua-mode t)
-;     (setq cua-auto-tabify-rectangles nil) ;; Don't tabify after rectangle commands
-;     (transient-mark-mode 1) ;; No region when it is not highlighted
-;     (setq cua-keep-region-after-copy t) ;; Standard Windows behaviour
+;; GUI related settings
+(if (display-graphic-p)
+    (progn
+      ;; Removed some UI elements
+      ;; (menu-bar-mode -1)
+      (tool-bar-mode -1)
+      (scroll-bar-mode -1)
+      ;; Show battery status
+      (display-battery-mode 1)))
+
+
+;; Hey, stop being a whimp and learn the Emacs keybindings!
+;; ;; Set copy+paste 
+;;  (cua-mode t)
+;;     (setq cua-auto-tabify-rectangles nil) ;; Don't tabify after rectangle commands
+;;     (transient-mark-mode 1) ;; No region when it is not highlighted
+;;     (setq cua-keep-region-after-copy t) ;; Standard Windows behaviour
 
 ;; REMOVE THE SCRATCH BUFFER AT STARTUP
 ;; Makes *scratch* empty.
@@ -74,6 +109,24 @@
 ;;   (if (get-buffer "*scratch*")
 ;;       (kill-buffer "*scratch*")))
 ;; (add-hook 'after-change-major-mode-hook 'remove-scratch-buffer)
+
+
+;; Disable the C-z sleep/suspend key
+;; See http://stackoverflow.com/questions/28202546/hitting-ctrl-z-in-emacs-freezes-everything
+(global-unset-key (kbd "C-z"))
+
+;; Disable the C-x C-b key, use helm (C-x b) instead
+(global-unset-key (kbd "C-x C-b"))
+
+
+;; Make copy and paste use the same clipboard as emacs.
+(setq select-enable-primary t
+      select-enable-clipboard t)
+
+
+(setq display-time-default-load-average nil)
+(setq display-time-day-and-date t display-time-24hr-format t)
+(display-time-mode t)
 
 
 ;; dired-icon-mode
@@ -95,6 +148,10 @@
   :ensure t)
 (require 'powerline)
 (powerline-default-theme)
+
+
+;; Add line numbers.
+;; (global-nlinum-mode t)
 
 ;; highlight current line
 (global-hl-line-mode +1)
@@ -120,7 +177,21 @@
 (save-place-mode 1)
 
 
+;; sets monday to be the first day of the week in calendar
+(setq calendar-week-start-day 1)
 
+;; save emacs backups in a different directory
+;; (some build-systems build automatically all files with a prefix, and .#something.someending breakes that)
+(setq backup-directory-alist '(("." . "~/.emacsbackups")))
+
+
+;; Enable show-paren-mode (to visualize paranthesis) and make it possible to delete things we have marked
+(show-paren-mode 1)
+(delete-selection-mode 1)
+
+
+;; use y or n instead of yes or no
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; These settings enables using the same configuration file on multiple platforms.
 ;; Note that windows-nt includes [[https://www.gnu.org/software/emacs/manual/html_node/elisp/System-Environment.html][windows 10]].
@@ -193,6 +264,7 @@
 (require 'auto-complete)
 (require 'auto-complete-config)
 (ac-config-default)
+(global-auto-complete-mode t)
 (ac-flyspell-workaround)
 
 
@@ -436,7 +508,47 @@
 (setq tab-width 4)
 (setq-default indent-tabs-mode nil)
 
+;; atomic-chrome, used to interact with GhostText extension for Google Chrome.
+(use-package atomic-chrome)
+(atomic-chrome-start-server)
+(setq atomic-chrome-default-major-mode 'python-mode)
+(setq atomic-chrome-extension-type-list '(ghost-text))
+;;(atomic-chrome-start-httpd)
+(setq atomic-chrome-server-ghost-text-port 4001)
+(setq atomic-chrome-url-major-mode-alist
+      '(("github\\.com" . gfm-mode)
+        ("overleaf.com" . latex-mode)
+        ("750words.com" . latex-mode)))
+; Select the style of opening the editing buffer by atomic-chrome-buffer-open-style.
+; full: Open in the selected window.
+; split: Open in the new window by splitting the selected window (default).
+; frame: Create a new frame and window in it. Must be using some windowing pacakge.
+(setq atomic-chrome-buffer-open-style 'split)
 
+
+;; awesome-tab
+(use-package awesome-tab
+  :load-path "~/.emacs.default/elisp/awesome-tab"
+  :config
+  (awesome-tab-mode t))
+
+
+
+
+;; avy
+;; Navigate buffer after selecting all sites starting with the same one or two letters.
+;; After entering the avy command in the minibuffer, selected sites will be highlighted but they will be indexed with letters.
+;; Enter a letter to go to a desired site.
+;; See https://github.com/abo-abo/avy for documentation. 
+;; 
+
+(use-package avy
+    :ensure t
+    :bind ("M-s" . avy-goto-char)
+         ("M-d" . avy-goto-char-2)
+         ("M-g f" . avy-goto-line)
+         ("M-g w" . avy-goto-word-1)
+)
 
 ;;## B
 
@@ -463,7 +575,7 @@
               (point)))
      (kill-buffer (current-buffer))))
  (insert (decode-coding-string bibtex-entry 'utf-8))
- (define-key bibtex-mode-map (kbd "C-c b") 'get-bibtex-from-doi)
+ (define-key bibtex-mode-map (kbd "C-c C-b") 'get-bibtex-from-doi)
  (bibtex-fill-entry))
 ;; I want run the above function to define it upon entry into a Bibtex file. 
 (add-hook
@@ -478,8 +590,72 @@
   (lambda ()
     (imenu-add-to-menubar "Imenu")))
 
+;; Fetch bibtex information from DOI.
+;; Source https://chainsawriot.com/postmannheim/2022/12/13/aoe13.html
+;; Copy the DOI from Firefox (or any source)
+;; 1. Go back to emacs (By C . e)
+;; 2. Run the custom command: M-x add-doi and paste yank the DOI (C-y)
+;; 3. Auto: Fetch the BIBTEX
+;; 4. from Crossref
+;; 5. Auto: Add it into “~/dev/dotfiles/bib.bib”
+;; 6. Save it
+(defun add-doi ()
+  (interactive)
+  (progn
+    (setq doi-to-query (read-string "DOI "))
+    (find-file "~/Documents/global.bib")
+    (end-of-buffer)
+    (doi-insert-bibtex doi-to-query)
+    )
+  )
 
-;;## Dired related
+(use-package biblio
+  :config
+  (setq-default
+   biblio-bibtex-use-autokey t
+   bibtex-autokey-name-year-separator ""
+   bibtex-autokey-year-title-separator ""
+   bibtex-autokey-year-length 4
+   bibtex-autokey-titlewords 7
+   bibtex-autokey-titleword-length -1 ;; -1 means exactly one
+   bibtex-autokey-titlewords-stretch 0
+   bibtex-autokey-titleword-separator ""
+   bibtex-autokey-titleword-case-convert 'upcase)
+  )
+
+
+
+
+
+
+;; ** D 
+
+;; Getting pretty icons 
+(use-package all-the-icons)
+
+(use-package dashboard
+;;   :after (all-the-icons dashboard-hackernews helm-system-packages)
+  :init
+  (dashboard-setup-startup-hook)
+
+  :custom
+  (dashboard-banner-logo-title "Let's get stuff done!")
+  (dashboard-startup-banner 'logo)
+  (dashboard-center-content t)
+  (dashboard-set-navigator t)
+;;   (dashboard-navigator-buttons '((("⤓" " Install system package" " Install system package" (lambda (&rest _) (helm-system-packages))))))
+  (dashboard-set-heading-icons t)
+  (dashboard-set-file-icons t)
+  (dashboard-items '((projects . 10)
+                     (recents . 15)
+                     (hackernews . 5))))
+
+
+(use-package dashboard-hackernews)
+
+
+
+;;# ** Dired related
 (use-package dired-subtree :ensure t
   :after dired
   :config
@@ -487,9 +663,9 @@
   (bind-key "<backtab>" #'dired-subtree-cycle dired-mode-map))
 
 
-;;## E
+;; ** E
 
-;;### ef-theme
+;; *** ef-theme
 
 (add-to-list 'load-path "~/latex-emacs/manual-packages/ef-themes")
 
@@ -541,30 +717,6 @@
 ;; - `ef-themes-preview-colors-current'#+END_SRC
 
 
-;; atomic-chrome, used to interact with GhostText extension for Google Chrome.
-(use-package atomic-chrome)
-(atomic-chrome-start-server)
-(setq atomic-chrome-default-major-mode 'python-mode)
-(setq atomic-chrome-extension-type-list '(ghost-text))
-;;(atomic-chrome-start-httpd)
-(setq atomic-chrome-server-ghost-text-port 4001)
-(setq atomic-chrome-url-major-mode-alist
-      '(("github\\.com" . gfm-mode)
-        ("overleaf.com" . latex-mode)
-        ("750words.com" . latex-mode)))
-; Select the style of opening the editing buffer by atomic-chrome-buffer-open-style.
-; full: Open in the selected window.
-; split: Open in the new window by splitting the selected window (default).
-; frame: Create a new frame and window in it. Must be using some windowing pacakge.
-(setq atomic-chrome-buffer-open-style 'split)
-
-
-;; awesome-tab
-(use-package awesome-tab
-  :load-path "~/.emacs.default/elisp/awesome-tab"
-  :config
-  (awesome-tab-mode t))
-
 
 ;; *** Electric-pair mode. Add matching pairs of quotes and parentheses.
 (electric-pair-mode)
@@ -589,9 +741,161 @@
 (setq electric-pair-inhibit-predicate #'my-inhibit-electric-pair-mode)
 
 
-;;## I
+;; *** Emojis
+(use-package emojify
+  :init
+  (add-hook 'after-init-hook #'global-emojify-mode))
 
-;;### ivy
+
+;; ** F
+
+
+;; *** FlySpell (spell checking)
+(dolist (flyspellmodes '(text-mode-hook
+					   org-mode-hook
+					   latex-mode-hook))
+(add-hook flyspellmodes 'turn-on-flyspell))
+
+;; comments and strings in code
+(add-hook 'prog-mode-hook 'flyspell-prog-mode)
+
+;; sets american english as defult 
+(setq ispell-dictionary "american")
+
+;; let us cycle american english (best written english) and norwegian 
+(defun change-dictionary ()
+(interactive)
+(ispell-change-dictionary (if (string-equal ispell-current-dictionary "american")
+							  "norsk"
+							"american")))
+
+;; helm functionality for flyspell. To make it more user friendly
+(use-package helm-flyspell
+:after flyspell
+:init
+;; Disable standard keys for flyspell correct, and make my own for helm.
+(define-key flyspell-mode-map (kbd "C-.") nil)
+(define-key flyspell-mode-map (kbd "C-,") #'helm-flyspell-correct))
+
+
+;; *** Focus
+;; Highlights the current section or function.
+(use-package focus)
+
+;; ** G
+
+
+
+
+
+;; ** H
+;; *** Helm
+;; Use ivy or helm but not both.
+;; (use-package helm
+;;  :after (projectile helm-projectile)
+;;
+;;  :init
+;;  (helm-mode 1)
+;;  (projectile-mode +1)
+;;  (helm-projectile-on)
+;;  (helm-adaptive-mode 1)
+;;  ;; hide uninteresting buffers from buffer list
+;;  (add-to-list 'helm-boring-buffer-regexp-list (rx "magit-"))
+;;  (add-to-list 'helm-boring-buffer-regexp-list (rx "*helm"))
+;;
+;;  :custom
+;;  (helm-M-x-fuzzy-match t)
+;;  (projectile-completion-system 'helm)
+;;  (helm-split-window-in-side-p t)
+;;
+;;  :bind
+;;  (("M-x" . helm-M-x)
+;;   ("C-x C-f" . helm-find-files)
+;;   ;; get the awesome buffer list instead of the standard stuff
+;;   ("C-x b" . helm-mini)))
+;;
+;;;; *** helm-system-packages
+;;;;(use-package helm-system-packages
+;;;;    :after helm)
+;;
+;;;; *** Helm-bibtex
+;;;; Can only use helm-bitex or ivy-bibtex
+;;;; See https://github.com/tmalsburg/helm-bibtex for extensive documentation and configuration.
+;;(use-package helm-bibtex
+;;    :ensure t
+;;    :config
+;;    (setq bibtex-completion-library-path '("~/0labeledPapers" "~/0bookaLabeled"))
+;;    (setq bibtex-completion-pdf-field "File")
+;;    (setq bibtex-completion-notes-path '("~/0labeledPapers/notes" "~/0papersLabeled/notes"))
+;;    (setq org-cite-follow-processor 'helm-bibtex-org-cite-follow)
+;;    (setq bibtex-completion-display-formats
+;;        '((article       . "${=has-pdf=:1}${=has-note=:1} ${=type=:3} ${year:4} ${author:36} ${title:*} ${journal:40}")
+;;          (inbook        . "${=has-pdf=:1}${=has-note=:1} ${=type=:3} ${year:4} ${author:36} ${title:*} Chapter ${chapter:32}")
+;;          (incollection  . "${=has-pdf=:1}${=has-note=:1} ${=type=:3} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+;;          (inproceedings . "${=has-pdf=:1}${=has-note=:1} ${=type=:3} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+;;          (t             . "${=has-pdf=:1}${=has-note=:1} ${=type=:3} ${year:4} ${author:36} ${title:*}")))
+;;    (setq bibtex-completion-additional-search-fields '(keywords))
+;;    (setq bibtex-completion-pdf-symbol "⌘")
+;;    (setq bibtex-completion-notes-symbol "✎")
+;;    (setq bibtex-completion-pdf-open-function
+;;      (lambda (fpath)
+;;        (call-process "open" nil 0 nil "-a" "/Applications/Skim.app" fpath)))
+;;    (setq bibtex-completion-find-additional-pdfs t)
+;;    (setq bibtex-completion-browser-function
+;;      (lambda (url _) (start-process "firefox" "*firefox*" "firefox" url)))
+;;      (setq bibtex-completion-format-citation-functions
+;;        '((org-mode      . bibtex-completion-format-citation-org-title-link-to-PDF)
+;;          (latex-mode    . bibtex-completion-format-citation-cite)
+;;          (markdown-mode . bibtex-completion-format-citation-pandoc-citeproc)
+;;          (default       . bibtex-completion-format-citation-default)))
+;;      (setq bibtex-completion-additional-search-fields '(tags))
+;;)
+;; 
+;;;; (require 'helm-config)
+;;;; 
+;;(global-set-key (kbd "<menu>") 'helm-command-prefix)
+;;
+;;(define-key helm-command-map "b" 'helm-bibtex)
+;;(define-key helm-command-map "B" 'helm-bibtex-with-local-bibliography)
+;;(define-key helm-command-map "n" 'helm-bibtex-with-notes)
+;;(define-key helm-command-map (kbd "<menu>") 'helm-resume)
+;;
+;;(defun helm-bibtex-my-publications (&optional arg)
+;;  "Search BibTeX entries authored by “Blaine Mooers”.
+;;
+;;With a prefix ARG, the cache is invalidated and the bibliography reread."
+;;  (interactive "P")
+;;  (helm-bibtex arg nil "Blaine Mooers"))
+;;
+;;;; Bind this search function to Ctrl-x p:
+;;(global-set-key (kbd "C-x p") 'helm-bibtex-my-publications)
+;;
+;;;; 
+;;(helm-add-action-to-source
+;; "Open annotated PDF (if present)" 'helm-bibtex-open-annotated-pdf
+;; helm-source-bibtex 1)
+;;
+;;(helm-delete-action-from-source "Insert BibTeX key" helm-source-bibtex)
+;;(helm-add-action-to-source "Insert BibTeX key" 'helm-bibtex-insert-key helm-source-bibtex 0)
+;;
+;;(helm-bibtex-helmify-action bibtex-completion-<action> helm-bibtex-<action>)
+;;
+;;;; (setq tmalsburg-pdf-watch
+;;;;       (file-notify-add-watch bibtex-completion-library-path
+;;;;       '(change)
+;;;;        (lambda (event) (bibtex-completion-candidates))))
+;;
+
+
+
+
+
+;; **  I
+
+;; 
+
+;; *** ivy
+;; Use ivy or helm but not both.
 (use-package ivy
  :ensure t
  :init
@@ -604,6 +908,10 @@
        ivy-use-selectable-prompt t))
 (use-package ivy-bibtex
    :ensure t)
+
+
+
+
 
 
 
@@ -716,7 +1024,7 @@
     )
   )
 
-; Outline-minor-mode key map Source: https://www.emacswiki.org/emacs/OutlineMinorMode
+;; Outline-minor-mode key map Source: https://www.emacswiki.org/emacs/OutlineMinorMode
 (define-prefix-command 'cm-map nil "Outline-")
 ; HIDE
 (define-key cm-map "q" 'hide-sublevels)    ; Hide everything but the top-level headings
@@ -725,13 +1033,13 @@
 (define-key cm-map "c" 'hide-entry)        ; Hide this entry's body
 (define-key cm-map "l" 'hide-leaves)       ; Hide body lines in this entry and sub-entries
 (define-key cm-map "d" 'hide-subtree)      ; Hide everything in this entry and sub-entries
-; SHOW
+;; SHOW
 (define-key cm-map "a" 'show-all)          ; Show (expand) everything
 (define-key cm-map "e" 'show-entry)        ; Show this heading's body
 (define-key cm-map "i" 'show-children)     ; Show this heading's immediate child sub-headings
 (define-key cm-map "k" 'show-branches)     ; Show all sub-headings under this heading
 (define-key cm-map "s" 'show-subtree)      ; Show (expand) everything in this heading & below
-; MOVE
+;; MOVE
 (define-key cm-map "u" 'outline-up-heading)                ; Up
 (define-key cm-map "n" 'outline-next-visible-heading)      ; Next
 (define-key cm-map "p" 'outline-previous-visible-heading)  ; Previous
@@ -740,10 +1048,87 @@
 (global-set-key "\M-o" cm-map)
 
 
+;; Increase size of LaTeX fragment previews in org files
+;; (plist-put org-format-latex-options :scale 2)
 
-;;## M
 
-;;### Configured for GitHub Markdown
+
+;; ## nlinum for line numbers
+;; (global-nlinum-mode t)
+
+
+;; *** LSP = Language Server Protocol 
+;; lsp-mode uses LSP servers to provides IDE functionality like code completion 
+;; (intellisense like using company-capf), navigation (jump to symbol), 
+;; refactoring functionality and so on. lsp-ui is used to get prettier boxes and 
+;; more info visible in an easy way (like javadoc). 
+;; Currently dap-mode is added because I play a bit with it, 
+;; and my first impressions are great so far 
+;; (for the few times I use a debugger, I know I’m weird for not needing it much at all).
+
+(use-package lsp-mode
+  :bind
+  ("M-RET" . lsp-execute-code-action))
+
+;; helper boxes and other nice functionality (like javadoc for java)
+(defun lsp-ui-show-doc-helper ()
+  (interactive)
+  (if (lsp-ui-doc--visible-p)
+      (lsp-ui-doc-hide)
+      (lsp-ui-doc-show)))
+
+(use-package lsp-ui
+  :after lsp-mode
+  :custom
+  (lsp-ui-sideline-show-code-actions t)
+  (lsp-ui-doc-position 'at-point)
+  :bind
+  ("M-s M-d" . lsp-ui-show-doc-helper))
+
+;; Additional helpers using treemacs
+;; (symbols view, errors, dependencies for Java etc.)
+(use-package lsp-treemacs
+  :after lsp-mode
+  :config
+  (lsp-treemacs-sync-mode 1))
+
+;; debugger component (for the few times I need it)
+(use-package dap-mode
+  :after lsp-mode
+  :init
+  (dap-auto-configure-mode))
+
+(use-package flycheck
+  :custom
+  (flycheck-indication-mode nil)
+  (flycheck-highlighting-mode 'lines))
+
+
+;; ** M
+;; *** magit
+(use-package magit
+  :commands magit-status
+  :bind
+  ("C-x g" . magit-status))
+
+;; show todos in magit status buffer
+(use-package magit-todos
+  :after (magit)
+  :hook
+  (magit-status-mode . magit-todos-mode)
+  :bind
+  ("C-x t" . helm-magit-todos))
+
+(use-package git-gutter
+  :ensure git-gutter-fringe
+  :after magit
+  :init
+  (global-git-gutter-mode 1)
+  (setq-default left-fringe-width 20)
+  :hook
+  (magit-post-refresh . git-gutter:update-all-windows))
+
+;; *** Configured for GitHub Markdown
 (use-package markdown-mode
   :ensure t
   :mode ("\\.md\\'" . gfm-mode)
@@ -784,32 +1169,32 @@
 ;; It will open a new window in your browser and update it as you type.
 
 
-; ;; Let's try an org-mode previewer
-; (require 'org-mode
-;   :mode ("\\.org\\'" . gfm-mode)
-;   :commands (org-mode gfm-mode)
-;   :config
-;   (setq org-command "pandoc -t html5"))
-;
-;   (defun my-org-filter (buffer)
-;     (princ
-;      (with-temp-buffer
-;        (let ((tmp (buffer-name)))
-;          (set-buffer buffer)
-;          (set-buffer (org tmp))
-;          (format "<!DOCTYPE html><html><title>Markdown preview</title><link rel=\"stylesheet\" href = \"https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.min.css\"/>
-;   <body><article class=\"markdown-body\" style=\"box-sizing: border-box;min-width: 200px;max-width: 980px;margin: 0 auto;padding: 45px;\">%s</article></body></html>" (buffer-string))))
-;      (current-buffer)))
-;   ;; Create the function my-org-preview to show the preview.
-;
-; (defun my-org-preview ()
-;   "Preview org."
-;   (interactive)
-;   (unless (process-status "httpd")
-;     (httpd-start))
-;   (impatient-mode)
-;   (imp-set-user-filter 'my-og-filter)
-;   (imp-visit-buffer))
+;; ;; Let's try an org-mode previewer
+;; (require 'org-mode
+;;   :mode ("\\.org\\'" . gfm-mode)
+;;   :commands (org-mode gfm-mode)
+;;   :config
+;;   (setq org-command "pandoc -t html5"))
+;;
+;;   (defun my-org-filter (buffer)
+;;     (princ
+;;      (with-temp-buffer
+;;        (let ((tmp (buffer-name)))
+;;          (set-buffer buffer)
+;;          (set-buffer (org tmp))
+;;          (format "<!DOCTYPE html><html><title>Markdown preview</title><link rel=\"stylesheet\" href = \"https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.min.css\"/>
+;;   <body><article class=\"markdown-body\" style=\"box-sizing: border-box;min-width: 200px;max-width: 980px;margin: 0 auto;padding: 45px;\">%s</article></body></html>" (buffer-string))))
+;;      (current-buffer)))
+;;   ;; Create the function my-org-preview to show the preview.
+;;
+;; (defun my-org-preview ()
+;;   "Preview org."
+;;   (interactive)
+;;   (unless (process-status "httpd")
+;;     (httpd-start))
+;;   (impatient-mode)
+;;   (imp-set-user-filter 'my-og-filter)
+;;   (imp-visit-buffer))
 
 
 ;;### Move selected regions up or down
@@ -885,8 +1270,34 @@
 ;; (global-set-key (kbd "M-<up>") 'move-line-up)
 ;; (global-set-key (kbd "M-<down>") 'move-line-down)
 
+;; Sometimes we want to edit multiple places in the file at the same time. 
+;; Most of the time this is just adding the same characters multiple places 
+;; in the file in places with the same pattern, 
+;; other times it is inserting a sequence of numbers.
 
-;;## O
+(use-package multiple-cursors
+  :bind
+  ("C->" . mc/mark-next-like-this))
+
+
+;; ** O
+
+;; *** Olivetti 
+;; Improves readability. 
+;; Olivetti centers the entire buffer like a sheet 
+;; of paper and truncates the content. 
+;; This helps my eyes when writing things that are 
+;; more natural flowing text (articles, books, other org mode stuff).
+
+(use-package olivetti
+  :if window-system
+  :after org
+  :custom
+  (olivetti-minimum-body-width 100)
+  (olivetti-body-width 0.8)
+  :hook
+  (org-mode . olivetti-mode))
+
 
 ;; <<<<<<< BEGINNING of org-agenda >>>>>>>>>>>>>>
 (setq org-agenda-start-with-log-mode t)
@@ -1036,6 +1447,7 @@
       (insert "* " hd "\n")))
   (end-of-line))
 
+
 (setq org-capture-templates
  '(
    ("j" "JournalArticles" entry
@@ -1170,46 +1582,45 @@
 
 
 ;; <<<<<<< BEGIN org-roam >>>>>>>>>>>>>>
-
-;;## Basic org-roam config
+ 
+;; ** Basic org-roam config
 (use-package org-roam
-  :ensure t
-  :custom
-  (org-roam-directory (file-truename "/Users/blaine/org-roam/"))
-  :bind (("C-c n l" . org-roam-buffer-toggle)
-         ("C-c n f" . org-roam-node-find)
-         ("C-c n g" . org-roam-graph)
-         ("C-c n i" . org-roam-node-insert)
-         ("C-c n c" . org-roam-capture)
-         ;; Dailies
-         ("C-c n j" . org-roam-dailies-capture-today))
-  :config
-  ;; If you're using a vertical completion framework, you might want a more informative completion interface
-  (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
-  (org-roam-db-autosync-mode)
-  ;; If using org-roam-protocol
-  (require 'org-roam-protocol))
+   :ensure t
+   :custom
+   (org-roam-directory (file-truename "/Users/blaine/org-roam/"))
+   :bind (("C-c n l" . org-roam-buffer-toggle)
+          ("C-c n f" . org-roam-node-find)
+          ("C-c n g" . org-roam-graph)
+          ("C-c n i" . org-roam-node-insert)
+          ("C-c n c" . org-roam-capture)
+          ;; Dailies
+          ("C-c n j" . org-roam-dailies-capture-today))
+   :config
+   ;; If you're using a vertical completion framework, you might want a more informative completion interface
+   (setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+   (org-roam-db-autosync-mode)
+   (org-roam-ui-mode)
+   ;; If using org-roam-protocol
+   (require 'org-roam-protocol))
 
 
-
-;;## Basic org-roam config
+;; ** Basic org-roam config
 ;; Following https://jethrokuan.github.io/org-roam-guide/
 
 (setq org-roam-capture-templates
       '(("m" "main" plain
          "%?"
-         :if-new (file+head "main/${slug}.org"
-                            "#+title: ${title}\n")
+         :if-new (file+head "main/${slug}.org" "#+title: ${title}\n\n\n\n* References\n\n* Backlinks\n\n#+created_at: %U\n#+last_modified: %U\n")
          :immediate-finish t
          :unnarrowed t)
         ("r" "reference" plain "%?"
          :if-new
-         (file+head "reference/${title}.org" "#+title: ${title}\n")
+         (file+head "reference/${title}.org" "#+title: ${title}\n\n\n\n\n* References\n\n* Backlinks\n\n#+created_at: %U\n#+last_modified: %U\n")
          :immediate-finish t
          :unnarrowed t)
         ("a" "article" plain "%?"
          :if-new
-         (file+head "articles/${title}.org" "#+title: ${title}\n#+filetags: :article:\n")
+         (file+head "articles/${title}.org" "#+title: ${title}\n#+filetags: :article:\n\n\n\n\n* References\n\n* Backlinks\n\n#+created_at: %U\n#+last_modified: %U\n")
          :immediate-finish t
          :unnarrowed t)))
 
@@ -1241,8 +1652,24 @@
 (add-hook 'org-roam-capture-new-node-hook #'jethro/tag-new-node-as-draft)
 
 
-;; ;;### Create the property “type” on my nodes.
-;; 
+
+;; settings to enable rendering of LaTeX equations with org-latex-preview with C-c C-x C-l
+;; I tried to get org-latex-preview to work without success on 12-10-2022
+;; I had to install texlive-xelatex via macports.
+;;
+
+
+(setq org-preview-latex-default-process 'dvisvgm)
+
+(setq org-latex-to-pdf-process 
+  '("xelatex -interaction nonstopmode %f"
+     "xelatex -interaction nonstopmode %f")) ;; for multiple passes
+
+;; Increase size of LaTeX fragment previews. Note that the previews do not scale up with C-x +
+(plist-put org-format-latex-options :scale 2)
+
+;; *** Create the property “type” on my nodes.
+
 ;; (cl-defmethod org-roam-node-type ((node org-roam-node))
 ;;   "Return the TYPE of NODE."
 ;;   (condition-case nil
@@ -1251,15 +1678,15 @@
 ;;         (file-name-directory
 ;;          (file-relative-name (org-roam-node-file node) org-roam-directory))))
 ;;     (error "")))
+;; 
+
+;;(setq org-roam-node-display-template
+;;          (concat "${type:15} ${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+;;
 
 
-;; (setq org-roam-node-display-template
-;;           (concat "${type:15} ${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
 
-
-
-
-;;### org-roam-bibtex config
+;; *** org-roam-bibtex config
 
 (use-package org-roam-bibtex
       :hook (org-roam-mode . org-roam-bibtex-mode))
@@ -1285,16 +1712,76 @@
   :NOTER_DOCUMENT: ${file}
   :NOTER_PAGE:
   :END:")))
+  
+
+(use-package citar-org-roam
+  :after citar org-roam
+  :no-require
+  :config (citar-org-roam-mode))
+
+
+(use-package citar
+  :bind (("C-c b" . citar-insert-citation)
+         :map minibuffer-local-map
+         ("M-b" . citar-insert-preset))
+  :custom
+  (citar-bibliography '("/Users/blaine/Documents/global.bib")))
+
+(setenv "PATH" (concat ":/opt/local/bin/" (getenv "PATH")))
+(add-to-list 'exec-path "/opt/local/bin/")
+
+;; org-preview-latex-process-alist
+
+;; org-preview-latex-default-process
 
 ;; <<<<<<< END org-roam >>>>>>>>>>>>>>
 
 
+;; source: https://www.reddit.com/r/emacs/comments/zjv1gj/org_files_to_docx/
+
+(defun hm/convert-org-to-docx-with-pandoc ()
+  "Use Pandoc to convert .org to .docx.
+  Comments:
+  The `-N' flag numbers the headers lines.
+  Use the `--from org' flag to have this function work on files
+  that are in Org syntax but do not have a .org extension"
+  (interactive)
+  (message "exporting .org to .docx")
+  (shell-command
+   (concat "pandoc -N --from org " (buffer-file-name)
+           " -o "
+           (file-name-sans-extension (buffer-file-name))
+           (format-time-string "-%Y-%m-%d-%H%M%S") ".docx")))
+
+(defalias 'o2d 'hm/convert-org-to-docx)
 
 
 
-;;## P
 
-;;###  Move to cursor to previously visited window
+
+
+;; ** P
+
+;; Paredit makes paranthesis handling a breeze in Lisp-languages.
+;; Only setting I really need is to make it possible to select something 
+;; and delete the selection (including the paranthesis).
+
+;; (use-package paredit
+;;   :config
+;;   ;; making paredit work with delete-selection-mode
+;;   ;; found on the excellent place called what the emacs d.
+;;   (put 'paredit-forward-delete 'delete-selection 'supersede)
+;;   (put 'paredit-backward-delete 'delete-selection 'supersede)
+;;   (put 'paredit-open-round 'delete-selection t)
+;;   (put 'paredit-open-square 'delete-selection t)
+;;   (put 'paredit-doublequote 'delete-selection t)
+;;   (put 'paredit-newline 'delete-selection t)
+;;   :hook
+;;   ((emacs-lisp-mode . paredit-mode)
+;;    (scheme-mode . paredit-mode)))
+
+
+;; *** Move to cursor to previously visited window
 ;; From the book Writing GNU Emacs Extensions by Bill Glickstein.
 (defun other-window-backward (&optional n)
   "Select Nth previous window."
@@ -1304,7 +1791,7 @@
 (global-set-key "\C-xp" 'other-window-backward)
 
 
-;;###  pdb-tools
+;; **  pdb-tools
 
 ;;Marcin Magnus's updated fork of pdb-tools by Charlie Bond and David Love.
 ;;[[https://github.com/mmagnus/emacs-pdb-mode][Gitub repo]]]
@@ -1395,10 +1882,33 @@
 ;; 
 
 
-;;## S
+;; *** projectile
+(use-package projectile
+ :ensure t)
+(projectile-mode +1)
+(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
 
-;;### Straight
+;; *** Python
+
+;; I sometimes write Python code for various things, sometimes as a calculator 
+;; :P (SymPy, NumPy and MatplotLib <3 ). 
+;;     
+;; I choose to start lsp manually due to sometimes not needing a language server 
+;; for minor edits (which is what I mostly do with Python).
+
+(use-package lsp-pyright
+  :after lsp-mode
+  :init
+  (require 'lsp-pyright))
+
+
+
+;;** S
+
+
+;; *** Straight
 ;; Install straight.el
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -1428,18 +1938,9 @@
 (pdf-drop-mode)
 
 
-
-
-
-
 ;;### Swiper related confg from https://github.com/zamansky/using-emacs/blob/lesson-6-swiper/init.el
 (use-package try
 	:ensure t)
-
-(use-package which-key
-	:ensure t 
-	:config
-	(which-key-mode))
 
 
 ;; Org-mode stuff
@@ -1503,41 +2004,110 @@
     ))
 
 
+;; ;; ** T
+;; ;; *** tabspaces
+;; ;; Source: 
+;; 
+;; (use-package tabspaces
+;;   ;; use this next line only if you also use straight, otherwise ignore it. 
+;;   :straight (:type git :host github :repo "mclear-tools/tabspaces")
+;;   :hook (after-init . tabspaces-mode) ;; use this only if you want the minor-mode loaded at startup. 
+;;   :commands (tabspaces-switch-or-create-workspace
+;;              tabspaces-open-or-create-project-and-workspace)
+;;   :custom
+;;   (tabspaces-use-filtered-buffers-as-default t)
+;;   (tabspaces-default-tab "Default")
+;;   (tabspaces-remove-to-default t)
+;;   (tabspaces-include-buffers '("*scratch*"))
+;;   ;; sessions
+;;   (tabspaces-session t)
+;;   (tabspaces-session-auto-restore t))
+;;   
+;; (defvar tabspaces-command-map
+;;   (let ((map (make-sparse-keymap)))
+;;     (define-key map (kbd "C") 'tabspaces-clear-buffers)
+;;     (define-key map (kbd "b") 'tabspaces-switch-to-buffer)
+;;     (define-key map (kbd "d") 'tabspaces-close-workspace)
+;;     (define-key map (kbd "k") 'tabspaces-kill-buffers-close-workspace)
+;;     (define-key map (kbd "o") 'tabspaces-open-or-create-project-and-workspace)
+;;     (define-key map (kbd "r") 'tabspaces-remove-current-buffer)
+;;     (define-key map (kbd "R") 'tabspaces-remove-selected-buffer)
+;;     (define-key map (kbd "s") 'tabspaces-switch-or-create-workspace)
+;;     (define-key map (kbd "t") 'tabspaces-switch-buffer-and-tab)
+;;     map)
+;;   "Keymap for tabspace/workspace commands after `tabspaces-keymap-prefix'.")
+;; 
+;; ;; If you use ivy you can use this function to limit your buffer search to only those in the tabspace.
+;; (defun tabspaces-ivy-switch-buffer (buffer)
+;;   "Display the local buffer BUFFER in the selected window.
+;; This is the frame/tab-local equivilant to `switch-to-buffer'."
+;;   (interactive
+;;    (list
+;;     (let ((blst (mapcar #'buffer-name (tabspaces-buffer-list))))
+;;       (read-buffer
+;;        "Switch to local buffer: " blst nil
+;;        (lambda (b) (member (if (stringp b) b (car b)) blst))))))
+;;   (ivy-switch-buffer buffer))
+;; 
+;; 
+;; ;; By default the *scratch* buffer is included in all workspaces. 
+;; ;; You can modify which buffers are included by default by changing the value of tabspaces-include-buffers.
+;; ;; If you want emacs to startup with a set of initial buffers in a workspace, do something like the following:
+;; 
+;; 
+;; 
+;; (defun my--tabspace-setup ()
+;;   "Set up tabspace at startup."
+;;   ;; Add *Messages* and *splash* to Tab \`Home\'
+;;   (tabspaces-mode 1)
+;;   (progn
+;;     (tab-bar-rename-tab "Home")
+;;     (when (get-buffer "*Messages*")
+;;       (set-frame-parameter nil
+;;                            'buffer-list
+;;                            (cons (get-buffer "*Messages*")
+;;                                  (frame-parameter nil 'buffer-list))))
+;;     (when (get-buffer "*splash*")
+;;       (set-frame-parameter nil
+;;                            'buffer-list
+;;                            (cons (get-buffer "*splash*")
+;;                                  (frame-parameter nil 'buffer-list))))))
+;; 
+;; (add-hook 'after-init-hook #'my--tabspace-setup)
+;; 
+;; ;; *** TeXcount setup for TeXcount version 2.3 and later
+;; ;; See https://app.uio.no/ifi/texcount/howto.html to use from the command line.
+;; (defun texcount ()
+;;   (interactive)
+;;   (let*
+;;     ( (this-file (buffer-file-name))
+;;       (enc-str (symbol-name buffer-file-coding-system))
+;;       (enc-opt
+;;         (cond
+;;           ((string-match "utf-8" enc-str) "-utf8")
+;;           ((string-match "latin" enc-str) "-latin1")
+;;           ("-encoding=guess")
+;;       ) )
+;;       (word-count
+;;         (with-output-to-string
+;;           (with-current-buffer standard-output
+;;             (call-process "/opt/local/bin/texcount" nil t nil "-0" enc-opt this-file)
+;;     ) ) ) )
+;;     (message word-count)
+;; ) )
+;; (add-hook 'LaTeX-mode-hook (lambda () (define-key LaTeX-mode-map "\C-cw" 'texcount)))
+;; (add-hook 'latex-mode-hook (lambda () (define-key latex-mode-map "\C-cw" 'texcount)))
 
-;;## T
-;;### TeXcount setup for TeXcount version 2.3 and later
-;; See https://app.uio.no/ifi/texcount/howto.html to use from the command line.
-(defun texcount ()
-  (interactive)
-  (let*
-    ( (this-file (buffer-file-name))
-      (enc-str (symbol-name buffer-file-coding-system))
-      (enc-opt
-        (cond
-          ((string-match "utf-8" enc-str) "-utf8")
-          ((string-match "latin" enc-str) "-latin1")
-          ("-encoding=guess")
-      ) )
-      (word-count
-        (with-output-to-string
-          (with-current-buffer standard-output
-            (call-process "/opt/local/bin/texcount" nil t nil "-0" enc-opt this-file)
-    ) ) ) )
-    (message word-count)
-) )
-(add-hook 'LaTeX-mode-hook (lambda () (define-key LaTeX-mode-map "\C-cw" 'texcount)))
-(add-hook 'latex-mode-hook (lambda () (define-key latex-mode-map "\C-cw" 'texcount)))
 
 
-
-;;### activate word count mode
+;; *** activate word count mode
 ;; This mode will count the LaTeX markup, but it does give the count of incrementally added words.
 (use-package wc-mode)
 (add-hook 'text-mode-hook 'wc-mode)
 ;; Suggested setting
 (global-set-key "\C-cw" 'wc-mode)
 
-;;### Do NOT MESS with the code below
+;; *** Do NOT MESS with the code below
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -1558,51 +2128,113 @@
  '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0)))))
 
 
- ;;### Tramp
- ;; Set default connection mode to SSH
- (setq tramp-default-method "ssh")
+;; *** Tramp
+;; Set default connection mode to SSH
+(setq tramp-default-method "ssh")
 
 
-;;## Y 
-;;### yasnippet related
+;; *** tree-sitter
+
+;; (require 'tree-sitter)
+;; (require 'tree-sitter-langs)
+;; (require 'evil-textobj-tree-sitter)
+;; (global-tree-sitter-mode)
+;; 
+
+
+;; ;; ** U
+;; ;; *** undo-tree
+;; (use-package undo-tree
+;;     :init
+;;     (global-undo-tree-mode)
+;;     :custom
+;;     (undo-tree-history-directory-alist '(("." . "~/latex-emacs/undo")))
+;;     )
+
+
+
+
+
+
+;; ** W 
+;; *** Which help
+
+(use-package which-key
+     :ensure t
+     :custom
+     (which-key-idle-delay 2)
+     :config
+     (which-key-mode))
+
+;; *** writeroom
+;; writeroom-mode for distraction-free writing.
+
+(with-eval-after-load 'writeroom-mode
+       (define-key writeroom-mode-map (kbd "C-M-<") #'writeroom-decrease-width)
+       (define-key writeroom-mode-map (kbd "C-M->") #'writeroom-increase-width)
+       (define-key writeroom-mode-map (kbd "C-M-=") #'writeroom-adjust-width))
+
+
+
+
+;; ** Y 
+;; *** yasnippet related
 (use-package yasnippet
   :ensure t
   :config
-  (yas-global-mode 1))
+  (yas-global-mode 1)
+  :bind
+  ("C-c y i" . yas-insert-snippet)
+  ("C-c y n" . yas-new-snippet)
+  )
 (global-set-key "\C-o" 'yas-expand)
+
 (use-package popup
   :ensure t)
-(require 'yasnippet)
-;; add some shotcuts in popup menu mode
-(define-key popup-menu-keymap (kbd "M-n") 'popup-next)
-(define-key popup-menu-keymap (kbd "TAB") 'popup-next)
-(define-key popup-menu-keymap (kbd "<tab>") 'popup-next)
-(define-key popup-menu-keymap (kbd "<backtab>") 'popup-previous)
-(define-key popup-menu-keymap (kbd "M-p") 'popup-previous)
+;; (require 'yasnippet)
+;; ;; add some shotcuts in popup menu mode
+;; (define-key popup-menu-keymap (kbd "M-n") 'popup-next)
+;; (define-key popup-menu-keymap (kbd "TAB") 'popup-next)
+;; (define-key popup-menu-keymap (kbd "<tab>") 'popup-next)
+;; (define-key popup-menu-keymap (kbd "<backtab>") 'popup-previous)
+;; (define-key popup-menu-keymap (kbd "M-p") 'popup-previous)
+;;
+;; (defun yas/popup-isearch-prompt (prompt choices &optional display-fn)
+;;   (when (featurep 'popup)
+;;     (popup-menu*
+;;      (mapcar
+;;       (lambda (choice)
+;;         (popup-make-item
+;;          (or (and display-fn (funcall display-fn choice))
+;;              choice)
+;;          :value choice))
+;;       choices)
+;;      :prompt prompt
+;;      ;; start isearch mode immediately
+;;      :isearch t
+;;      )))
+;; (setq yas/prompt-functions '(yas/popup-isearch-prompt yas/no-prompt))
+;;
+;; (defun complete-if-yas-field (&rest _)
+;;   (let ((field (yas-current-field)))
+;;     (when (and field
+;;                (not (yas--field-modified-p field)))
+;;       (company-manual-begin))))
+;;
+;; (advice-add 'company-complete-selection :after 'complete-if-yas-field)
+;; (advice-add 'yas-next-field :after 'complete-if-yas-field)
 
-(defun yas/popup-isearch-prompt (prompt choices &optional display-fn)
-  (when (featurep 'popup)
-    (popup-menu*
-     (mapcar
-      (lambda (choice)
-        (popup-make-item
-         (or (and display-fn (funcall display-fn choice))
-             choice)
-         :value choice))
-      choices)
-     :prompt prompt
-     ;; start isearch mode immediately
-     :isearch t
-     )))
-(setq yas/prompt-functions '(yas/popup-isearch-prompt yas/no-prompt))
 
-(defun complete-if-yas-field (&rest _)
-  (let ((field (yas-current-field)))
-    (when (and field
-               (not (yas--field-modified-p field)))
-      (company-manual-begin))))
-
-(advice-add 'company-complete-selection :after 'complete-if-yas-field)
-(advice-add 'yas-next-field :after 'complete-if-yas-field)
-
-
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(which-key-posframe tabbar paredit olivetti org-wc markdown-preview-mode ac-clang git-gutter+ magit-todos magit flycheck dap-mode lsp-treemacs lsp-ui lsp-mode exec-path-from-shell org-roam-timestamps impatient-mode markdown-mode helm-system-packages atomic-chrome tree-sitter-langs org-pomodoro dired-subtree yasnippet try avy-menu maxframe material-theme powerline better-defaults which-key focus dired-icon ace-window nlinum emojify electric-spacing helm-bibtex 0xc dirvish helm-flyspell org-noter-pdftools auctex org-bullets counsel multiple-cursors org-ref org-roam-bibtex rainbow-delimiters org-preview-html git-gutter-fringe org-roam-ui wc-mode org-drill 0blayout evil-textobj-tree-sitter use-package languagetool auto-complete)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
