@@ -1,7 +1,7 @@
-# latex-emacs: a GNU Emacs profile for using LaTeX and Org in academic research
+# latex-emacs29: a GNU Emacs profile for using LaTeX and Org in academic research
 ## Make writing tasks fun by disguising them as coding projects!
 
-This repo contains a init.el file (configuration file) for using LaTeX in GNU Emacs.
+This repo contains a init.el file (configuration file) for using LaTeX in GNU Emacs version 29.
 You can adapt it to other configurations of Emacs (e.g., Spacemacs, Doom, etc).
 The SciMax configuration probably has similar support built-in.
 
