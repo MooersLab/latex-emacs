@@ -225,7 +225,7 @@ I do not need the crutch of org to produce tex files.
 ## Installation
 
 1. `git clone https://MooersLab/github.com/latex-emacs  latex-emacs` in your home directory.
-2. Create link to your snippets folder:  `ln -s snippets ~/.emacs.d/snippets`
+2. Create link to your snippets folder:  `ln -s snippets ~/.emacs.d/snippets`. This link negates the need to maintain multiple copies of the snippet libraries.
 3. Edit file paths in init.el as needed. Git clone the packages stored in manual-packages.
 4. Add `alias e29l='/Applications/Emacs29.0.5.app/Contents/MacOS/Emacs --init-directory ~/latex-emacs29` to your `.bashrc` or `.zshrc` file so you can open Emacs with alias `e29l`. 
 5. Add the GhostText extension to Chrome or Firefox or Safari or Edge.
