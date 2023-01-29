@@ -526,12 +526,25 @@
 (setq atomic-chrome-buffer-open-style 'split)
 
 
-;; awesome-tab
+;; awesome-tabs
+;; I love awesome-tabs; some people do not.
+;; cd ~/latex-emacs29/manual-packages
+;; git clone --depth=1 https://github.com/manateelazycat/awesome-tab.git 
 (use-package awesome-tab
-  :load-path "~/.emacs.default/elisp/awesome-tab"
+  :load-path "~/latex-emacs29/manual-packages/awesome-tab"
   :config
   (awesome-tab-mode t))
 
+(global-set-key (kbd "s-1") 'awesome-tab-select-visible-tab)
+(global-set-key (kbd "s-2") 'awesome-tab-select-visible-tab)
+(global-set-key (kbd "s-3") 'awesome-tab-select-visible-tab)
+(global-set-key (kbd "s-4") 'awesome-tab-select-visible-tab)
+(global-set-key (kbd "s-5") 'awesome-tab-select-visible-tab)
+(global-set-key (kbd "s-6") 'awesome-tab-select-visible-tab)
+(global-set-key (kbd "s-7") 'awesome-tab-select-visible-tab)
+(global-set-key (kbd "s-8") 'awesome-tab-select-visible-tab)
+(global-set-key (kbd "s-9") 'awesome-tab-select-visible-tab)
+(global-set-key (kbd "s-0") 'awesome-tab-select-visible-tab)
 
 
 
@@ -635,6 +648,7 @@
 
 (use-package dashboard
 ;;   :after (all-the-icons dashboard-hackernews helm-system-packages)
+  :ensure t
   :init
   (dashboard-setup-startup-hook)
 
@@ -651,7 +665,8 @@
                      (hackernews . 5))))
 
 
-(use-package dashboard-hackernews)
+(use-package dashboard-hackernews
+    :ensure t)
 
 
 
@@ -667,9 +682,8 @@
 
 ;; *** ef-theme
 
-(add-to-list 'load-path "~/latex-emacs/manual-packages/ef-themes")
-
-(require 'ef-themes)
+(use-package ef-themes
+    :ensure t)
 ;; If you like two specific themes and want to switch between them, you
 ;; can specify them in `ef-themes-to-toggle' and then invoke the command
 ;; `ef-themes-toggle'.  All the themes are included in the variable
@@ -698,7 +712,7 @@
 (mapc #'disable-theme custom-enabled-themes)
 
 ;; Load the theme of choice:
-(load-theme 'ef-spring :no-confirm)
+(load-theme 'ef-cyprus :no-confirm)
 
 ;; The themes we provide:
 ;;
@@ -728,10 +742,10 @@
 (use-package electric-spacing
       :ensure t)
 
-;; git clone https://github.com/walmes/electric-spacing.git into .emacs.default/elisp
-;; byte-compile with (byte-compile-file "~/ess-emacs/elisp/electric-spacing/electric-spacing.el")
-;; byte-compile with (byte-compile-file "~/ess-emacs/elisp/electric-spacing/electric-spacing-r.el")
-(add-to-list 'load-path "~/ess-emacs/elisp/electric-spacing")
+;; git clone https://github.com/walmes/electric-spacing.git into ~/latex-emacs29/manual-packages
+;; byte-compile with (byte-compile-file "~/latex-emacs29/manual-packages/electric-spacing/electric-spacing.el")
+;; byte-compile with (byte-compile-file "~/latex-emacs29/manual-packages/electric-spacing/electric-spacing-r.el")
+(add-to-list 'load-path "~/latex-emacs29/manual-packages/electric-spacing")
 (require 'electric-spacing-r)
 (add-hook 'ess-mode-hook #'electric-spacing-mode)
 ;; restrict to limited number of modes to keep it out of the minibuffer
@@ -770,12 +784,12 @@
 							"american")))
 
 ;; helm functionality for flyspell. To make it more user friendly
-(use-package helm-flyspell
-:after flyspell
-:init
-;; Disable standard keys for flyspell correct, and make my own for helm.
-(define-key flyspell-mode-map (kbd "C-.") nil)
-(define-key flyspell-mode-map (kbd "C-,") #'helm-flyspell-correct))
+;; (use-package helm-flyspell
+;; :after flyspell
+;; :init
+;; ;; Disable standard keys for flyspell correct, and make my own for helm.
+;; (define-key flyspell-mode-map (kbd "C-.") nil)
+;; (define-key flyspell-mode-map (kbd "C-,") #'helm-flyspell-correct))
 
 
 ;; *** Focus
@@ -887,9 +901,6 @@
 ;;
 
 
-
-
-
 ;; **  I
 
 ;; 
@@ -908,10 +919,6 @@
        ivy-use-selectable-prompt t))
 (use-package ivy-bibtex
    :ensure t)
-
-
-
-
 
 
 
@@ -1116,8 +1123,7 @@
   :after (magit)
   :hook
   (magit-status-mode . magit-todos-mode)
-  :bind
-  ("C-x t" . helm-magit-todos))
+)
 
 (use-package git-gutter
   :ensure git-gutter-fringe
@@ -1541,9 +1547,11 @@
 
 
 ;; <<<<<<< BEGIN org-ref >>>>>>>>>>>>>>
-(require 'org-ref)
+(use-package org-ref
+    :ensure t)
 (require 'org-ref-ivy)
-(require 'bibtex)
+(use-package bibtex
+    :ensure t)
 
 (setq bibtex-completion-bibliography '("/Users/blaine/Documents/global.bib")
 	bibtex-completion-library-path '("/Users/blaine/0papersLabeled/")
@@ -1798,7 +1806,7 @@
 
 
 ;; pdb.el
-(load-file "~/.emacs.default/plugins/emacs-pdb-mode/pdb-mode.el")
+(load-file "~/latex-emacs29/manual-packages/emacs-pdb-mode/pdb-mode.el")
 (setq pdb-rasmol-name "/Applications/PyMOL.app/Contents/bin/pymol")
 (setq auto-mode-alist
      (cons (cons "pdb$" 'pdb-mode)
@@ -2231,7 +2239,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(which-key-posframe tabbar paredit olivetti org-wc markdown-preview-mode ac-clang git-gutter+ magit-todos magit flycheck dap-mode lsp-treemacs lsp-ui lsp-mode exec-path-from-shell org-roam-timestamps impatient-mode markdown-mode helm-system-packages atomic-chrome tree-sitter-langs org-pomodoro dired-subtree yasnippet try avy-menu maxframe material-theme powerline better-defaults which-key focus dired-icon ace-window nlinum emojify electric-spacing helm-bibtex 0xc dirvish helm-flyspell org-noter-pdftools auctex org-bullets counsel multiple-cursors org-ref org-roam-bibtex rainbow-delimiters org-preview-html git-gutter-fringe org-roam-ui wc-mode org-drill 0blayout evil-textobj-tree-sitter use-package languagetool auto-complete)))
+   '(which-key-posframe tabbar paredit olivetti org-wc markdown-preview-mode ac-clang git-gutter+ magit-todos magit flycheck dap-mode lsp-treemacs lsp-ui lsp-mode exec-path-from-shell org-roam-timestamps impatient-mode markdown-mode atomic-chrome tree-sitter-langs org-pomodoro dired-subtree yasnippet try avy-menu maxframe material-theme powerline better-defaults which-key focus dired-icon ace-window nlinum emojify electric-spacing 0xc dirvish org-noter-pdftools auctex org-bullets counsel multiple-cursors org-ref org-roam-bibtex rainbow-delimiters org-preview-html git-gutter-fringe org-roam-ui wc-mode org-drill 0blayout evil-textobj-tree-sitter use-package languagetool auto-complete)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
