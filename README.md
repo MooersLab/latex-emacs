@@ -1,10 +1,15 @@
-# latex-emacs29: a GNU Emacs profile for using LaTeX and Org in academic research
+![Version](https://img.shields.io/static/v1?label=latex-emacs&message=0.1&color=brightcolor)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
+
+# A GNU Emacs profile for using LaTeX and Org in academic research
+
 ## Make writing tasks fun by disguising them as coding projects!
 
-This repo contains a init.el file (configuration file) for using LaTeX in GNU Emacs version 29.
+This repo contains a `init.el` file (configuration file) for using LaTeX in GNU Emacs version 29.
 You can adapt it to other configurations of Emacs (e.g., Spacemacs, Doom, etc).
 The SciMax configuration probably has similar support built-in.
-See latex-emacs28 and latex-emacs30 for configurations that works with Emacs version 28 and Emacs version 30 respectively. 
+See latex-emacs28 and latex-emacs30 for configurations that work with Emacs version 28 and Emacs version 30, respectively. 
 
 Features include the following:
 
@@ -21,7 +26,7 @@ Features include the following:
 * pdf-noter
 
 I built the latex-emacs profile on top of a configuration by [Alvaro Ortiz Troncoso](https://github.com/aot29/Emacs_Python_R_LaTeX).
-His configuration included the auto-complete-auctex.el package of Chris Monsanto from 2012.
+His configuration included the `auto-complete-auctex.el` package of Chris Monsanto from 2012.
 Although the autocompletion is out of style for Emacs fans at the cutting edge of package development, it works!
 
 I designed this configuration to support the efficient editing of academic documents in LaTeX.
@@ -30,12 +35,12 @@ See the [related repos](#Related) section below for LaTeX templates for the firs
 
 This configuration is compatible with [org-mode](https://de.wikipedia.org/wiki/Org-mode). 
 Org-mode is an enhanced form of markdown that can read LaTeX code intermingled with org markup.
-Org-mode is very popular with users of Emacs because the sections and subsections are easy to fold, and org documents are easy to export to many file formats. 
+Org-mode is very popular with Emacs users because the sections and subsections are easy to fold, and org documents are easy to export to many file formats. 
 It evolved out of an outliner package.
 It greatly eases the creation of lists, so it is useful for planning and brainstorming.
 Org-mode also has a powerful org-agenda component for scheduling events.
 Many have tried to use org-mode to implement the Getting Things Done method of Jim Allen.
-Org-mode also powers the [org-roam](https://www.orgroam.com/) package, which implements electronicallyt the [zettelkasten system](https://wiki2.org/en/Zettelkasten) or slip-box system of taking smart notes.
+Org-mode also powers the [org-roam](https://www.orgroam.com/) package, which implements electronically the [zettelkasten system](https://wiki2.org/en/Zettelkasten) or slip-box system of taking smart notes.
 
 
 In addition to Emacs, you can edit org-mode markdown in several other leading text editors like [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=BobbyBoyd.vs-org), so you can still use org-mode if you fear Emacs.
@@ -51,15 +56,15 @@ It is a 6000-line literature programming document.
 I wrote the comments in org-mode; they flank blocks of elisp code. 
 
 You can read an org-mode document into Emacs with the *latex-emacs* configuration, even though the latex-emacs init.el file does not call org-mode because the base distribution of Emacs now contains org-mode.
-See the this [repo](https://github.com/MooersLab/manuscriptInOrg) for a manuscript template that can be edited in org-mode.
-See this [repo](https://github.com/MooersLab/writingLogTemplateInOrg) for a writing log to be used in parallel to writing a manuscript in org-mode. 
+See this [repo](https://github.com/MooersLab/manuscriptInOrg) for a manuscript template that can be edited in `org-mode`.
+For a writing log to be used in parallel to writing a manuscript in org-mode, see this [repo] (https://github.com/MooersLab/writingLogTemplateInOrg). 
 
 I am keeping the *latex-emacs* configuration isolated from my main configuration to ease the development of *latex-emacs*.
 The *latex-emacs*  profile also serves as a backup configuration when I break my main configuration, which happens less often these days.
 
-I use this following bash alias to start Emacs29 with the configuration stored in the folder *~/latex-emacs29*.
+I use the following bash alias to start Emacs29 with the configuration stored in the folder *~/latex-emacs29*.
 Note that I am not hiding this folder in my top directory.
-I find the hinderance of hiding of the Emacs configuration folder to be greater than the benefit of not accidentally deleting my Emacs folder once in a lifetime. 
+I find the hindrance of hiding the Emacs configuration folder to be greater than the benefit of not accidentally deleting it once in a lifetime. 
 With my init.el file on GitHub, I can easily restore my Emacs configuration if disaster strikes.
 
 ```bash
@@ -67,7 +72,7 @@ alias e29l='/Applications/Emacs29.0.5.app/Contents/MacOS/Emacs --init-directory 
 ```
 
 The **--init-directory** flag has been available as of January 2022 with Emacs version 29.0.5.
-This flag negates the need for the package chemacs2 and its slighly more complex setup.
+This flag negates the need for the package chemacs2 and its slightly more complex setup.
 
 I made a second variant of the above alias for debugging:
 
@@ -111,7 +116,7 @@ Most literate programming projects built on top of markdown have this serious li
 
 ## Why Emacs?
 
-Many Emacs and package developers have developed a suite of packages over the past several decades to aid the writing of LaTeX documents.
+Over the past several decades, many Emacs and package developers have developed a suite of packages to aid the writing of LaTeX documents.
 These features support efficient editing of LaTeX documents.
 
 In addition, you can extend Emacs with the Emacs Lisp programming language.
@@ -144,7 +149,7 @@ This saves a lot of time.
 I have subscribed to the Pro license for several years and have used it for six years.
 I recommend the free account to anyone trying to master LaTeX.
 I recommend the Pro license for anyone doing collaborative writing.
-The Pro license also enables the use of git to make copies of your writing projects on your computer easily.
+The Pro license also enables you to easily make copies of your writing projects on your computer using Git.
 
 #### GhostText and Overleaf
 Overleaf does support Emacs keybindings.
@@ -167,7 +172,7 @@ My configuration for atomic-chrome is below:
 ; Select the style of opening the editing buffer by atomic-chrome-buffer-open-style.
 ; full: Open in the selected window.
 ; split: Open in the new window by splitting the selected window (default).
-; frame: Create a new frame and window in it. Must be using some windowing pacakge.
+; frame: Create a new frame and window in it. You must be using some windowing package.
 (setq atomic-chrome-buffer-open-style 'split)
 ```
 
@@ -186,12 +191,12 @@ My configuration for atomic-chrome is below:
 Org-mode includes support for document preparation, time management, and literate programming.
 Many people in the past decade were drawn to Emacs by org-mode.
 Org documentats can recognize LaTeX markup.
-Exporting an org document through LaTeX to a PDF and having that PDF open in your default PDF-viewer is seamless.
+Exporting an org document through LaTeX to a PDF and having that PDF open in your default PDF viewer is seamless.
 However, compiling pdfs in Overleaf is more automated and even faster.
 
 The main drawbacks for me are as follows:
 
-- Most publishers do not accept org files, while they do accept tex files. (You can export the org file to a LaTeX file that might need heavy editing to get it accepted by the publisher.)
+- Most publishers do not accept org files, but they do accept text files. (You can export the org file to a LaTeX file that might need heavy editing to get it accepted by the publisher.)
 - Overleaf does not support the use of org files. 
 - Org markup adds another layer of abstraction on top of LaTeX.
 
@@ -230,7 +235,7 @@ I do not need the crutch of org to produce tex files.
 4. Add `alias e29l='/Applications/Emacs29.0.5.app/Contents/MacOS/Emacs --init-directory ~/latex-emacs29` to your `.bashrc` or `.zshrc` file so you can open Emacs with alias `e29l`. 
 5. Add the GhostText extension to Chrome or Firefox or Safari or Edge.
 6. Install LaTeX and include in your PATH.
-7. Edit in init.el the file path to texcount. This Perl script comes with LaTeX. You might be able to invoke texcount without the file path if you have no previously defined aliases to do texcount.
+7. Edit in `init.e`l the file path to texcount. This Perl script comes with LaTeX. You might be able to invoke texcount without the file path if you have no previously defined aliases to do texcount.
 
 
 ## Operation
@@ -316,15 +321,15 @@ If you are rusty or just starting to use Emacs, you need only these 23 key bindi
 Vim users can turn on evil-mode to emulate vim key-bindings.
 
 CUA keybindings (C-c, C-v, and C-x for copy, paste, and cut) can be invoked by uncommenting the code in the init.el file.
-However, there are conflicts with the latex keybindings.
-I recommend either using evil-mode or learn the essential Emacs key bindings; they are much easier to master than they look :).
+However, there are conflicts with the LaTeX keybindings.
+I recommend either using evil-mode or learning the essential Emacs key bindings; they are much easier to master than they look :).
 
 
 ## Quizzes
 
 The recall of key bindings fades quickly after the first encounter but improves with spaced repetitions.
-I have provided two sets of quizzes to improve recall:  One set each set of the above key bindings.
-The quizzes in a set have the same questions, but I randomized their order to break up your memory of the answers that was based on the context of the question in the quiz.
+I have provided two sets of quizzes to improve recall:  One set for each set of the above key bindings.
+The quizzes in the set have the same questions, but I randomized their order to break up your memory of the answers based on the context of the question in the quiz.
 
 
 <a id="Releted"><h2>Related projects of possible interest</h2></a>
@@ -342,3 +347,14 @@ The quizzes in a set have the same questions, but I randomized their order to br
 - [Slides from talk about GhostText, Data Science Workshop, July 2022](https://github.com/MooersLab/DSW22ghosttext)
 - [Video link to talk about GhostText, Data Science Workshop, July 2022](https://mediasite.ouhsc.edu/Mediasite/Channel/python/watch/4da0872f028c4255ae12935655e911321d)
 - [The writer's law](https://github.com/MooersLab/thewriterslaw)
+
+## Funding
+- NIH: R01 CA242845, R01 AI088011
+- NIH: P30 CA225520 (PI: R. Mannel); P20GM103640 and P30GM145423 (PI: A. West)
+
+## Updates
+|Version      | Changes                                                                                                                                    | Date                 |
+|:-----------:|:------------------------------------------------------------------------------------------------------------------------------------------:|:--------------------:|
+| Version 0.2 |  Added funding and update table. Minor edits to the README.md                                                                              | 2024 May 3           |
+
+
