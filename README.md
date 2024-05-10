@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/static/v1?label=latex-emacs&message=0.2&color=brightcolor)
+![Version](https://img.shields.io/static/v1?label=latex-emacs&message=0.2.1&color=brightcolor)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 
@@ -17,7 +17,7 @@ Features include the following:
 * AUCTeX
 * atomic-chrome (GhostText)
 * awesome-tabs (install from Github)
-* dashboard and dashboard-hackernews (keep abreast with the lastest distractions)
+* dashboard and dashboard-hackernews (keep abreast with the latest distractions)
 * org-mode
 * org-agenda
 * org-roam (capture templates include timestamps)
@@ -136,20 +136,21 @@ According to the [Lindy effect](https://wiki2.org/en/Lindy_Effect), it should be
 
 Overleaf is a web-based LaTeX editor. 
 Overleaf is excellent for maintaining multiple writing projects and strongly supports collaborative editing.
-I find the Overleaf GUI to be intuitive.
-The compile times are several times faster on the Overleaf servers than on my computer.
-Overleaf also has an extensive collection of attractive documentation about LaTeX.
-Emacs 
+I find the Overleaf GUI to be intuitive and has good support for debugging.
+Overleaf also has an extensive collection of attractive documentation about LaTeX that is a nice supplement to TeX StackExchange.
 
 I have over 600s writing projects on Overleaf.
 These projects include grant applications, manuscripts, slideshows, and posters.
-It is trivial to use an old project as a template to make a new project.
+I often use an old project as a template to make a new project.
 This saves a lot of time.
 
-I have subscribed to the Pro license for several years and have used it for six years.
+I use it multiple times a day every day because I store my daily writing in a book document that serves as my digital laboratory notebook.
+I speed up navigation to active project by storing the URLs to these projects on a private homepage (index. HTML).
+
+I have subscribed to the Pro license for several years and have used Overleaf for six years.
 I recommend the free account to anyone trying to master LaTeX.
 I recommend the Pro license for anyone doing collaborative writing.
-The Pro license also enables you to easily make copies of your writing projects on your computer using Git.
+The Pro license enables you to easily make copies of your writing projects on your computer using Git.
 
 #### GhostText and Overleaf
 Overleaf does support Emacs keybindings.
@@ -301,12 +302,12 @@ If you are rusty or just starting to use Emacs, you need only these 23 key bindi
 |C-x u |  Undo|
 |C-M-_ | Redo undone changes.|
 |C-x C-s | Save file.|
-|C-x C-w | Save file to the specified filename.|
+|C-x C-w | Save the current buffer to the specified filename.|
 |C-y     | Paste clipboard. |
 |C-w     | Cut |
 |s-c     | Copy (option-c). The init.el file above maps the Mac option key to `s`, the Super key.|
 |C-k     | Delete line and store in kill ring (i.e., clipboard). Repeat to delete the new-line character.|
-|C-a     | Move cursor to the beginning of the line.|
+|C-a     | Move the cursor to the beginning of the line.|
 |C-e     | Move the cursor to the end of the line.|
 |C-x d   | Open dired for directory navigation.|
 |C-h     | Invoke the help menu. |
@@ -318,9 +319,9 @@ If you are rusty or just starting to use Emacs, you need only these 23 key bindi
 
 
 
-Vim users can turn on evil-mode to emulate vim key-bindings.
+Vim users can turn on evil mode to emulate Vim key bindings.
 
-CUA keybindings (C-c, C-v, and C-x for copy, paste, and cut) can be invoked by uncommenting the code in the init.el file.
+Uncommenting the corresponding code in the init. el file invokes CUA keybindings (C-c, C-v, and C-x for copy, paste, and cut).
 However, there are conflicts with the LaTeX keybindings.
 I recommend either using evil-mode or learning the essential Emacs key bindings; they are much easier to master than they look :).
 
@@ -356,5 +357,5 @@ The quizzes in the set have the same questions, but I randomized their order to 
 |Version      | Changes                                                                                                                                    | Date                 |
 |:-----------:|:------------------------------------------------------------------------------------------------------------------------------------------:|:--------------------:|
 | Version 0.2 |  Added funding and update table. Minor edits to the README.md                                                                              | 2024 May 3           |
-
+| Version 0.2.1 | Minor edits in the README.md.                                                                                                            | 2024 May 10          |
 
