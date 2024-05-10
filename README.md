@@ -34,7 +34,7 @@ See the [Features](#Features) section below.
 See the [related repos](#Related) section below for LaTeX templates for the first manuscript submission, a writing log to accompany every writing project, a poster, a slideshow, a diary for 2022, and a diary for 2023.
 
 This configuration is compatible with [org-mode](https://de.wikipedia.org/wiki/Org-mode). 
-Org-mode is an enhanced form of markdown that can read LaTeX code intermingled with org markup.
+Org-mode is an enhanced markdown that reads LaTeX code intermingled with org markup.
 Org-mode is very popular with Emacs users because the sections and subsections are easy to fold, and org documents are easy to export to many file formats. 
 It evolved out of an outliner package.
 It greatly eases the creation of lists, so it is useful for planning and brainstorming.
@@ -81,7 +81,7 @@ alias e29ld='/Applications/Emacs29.0.5.app/Contents/MacOS/Emacs --init-directory
 ```
 
 
-## Multiple versions of Emacs on same computer
+## Multiple versions of Emacs on the same computer
 
 You can have multiple versions of Emacs on your system; however, you will have to match the profiles to the Emacs version because the binaries in the elpa subfolder of the latex-emacs29 folder may not run with different versions of Emacs. 
 
@@ -132,28 +132,40 @@ Emacs has been under development for 45 years.
 According to the [Lindy effect](https://wiki2.org/en/Lindy_Effect), it should be available for another 45 years.
 
 
-## Why not Overleaf
+## Why not Overleaf?
 
 Overleaf is a web-based LaTeX editor. 
 Overleaf is excellent for maintaining multiple writing projects and strongly supports collaborative editing.
-I find the Overleaf GUI to be intuitive and has good support for debugging.
-Overleaf also has an extensive collection of attractive documentation about LaTeX that is a nice supplement to TeX StackExchange.
+I find the Overleaf GUI intuitive and has good support for debugging.
+The GUI provides helpful tools for generating the code for tables of various sizes and for selecting images to be inserted into figure environments.
+It provides an outside view of the document.
+I use this feature to generate outline views of the slide shows I am developing in Beamer.
+I use this outline view to navigate to specific slides and to rearrange slides while editing the beamer file.
+Overleaf also has an extensive collection of attractive documentation about LaTeX, a nice supplement to TeX StackExchange.
 
 I have over 600s writing projects on Overleaf.
 These projects include grant applications, manuscripts, slideshows, and posters.
 I often use an old project as a template to make a new project.
 This saves a lot of time.
 
-I use it multiple times a day every day because I store my daily writing in a book document that serves as my digital laboratory notebook.
-I speed up navigation to active project by storing the URLs to these projects on a private homepage (index. HTML).
+I use it multiple times daily because I store my daily writing in a book document that serves as my digital laboratory notebook.
+I speed up navigation to active projects by storing their URLs on a private homepage (index.html).
 
 I have subscribed to the Pro license for several years and have used Overleaf for six years.
 I recommend the free account to anyone trying to master LaTeX.
-I recommend the Pro license for anyone doing collaborative writing.
-The Pro license enables you to easily make copies of your writing projects on your computer using Git.
+I recommend the Pro license for anyone doing collaborative writing or managing dozens to 100s of projects.
+The Pro license enables you to use Git to make copies of your writing projects on your computer using Git.
+
+The reasons not to use Overleaf include the following: 
+
+- pricey annual subscription
+- lack of full support for Emacs key bindings
+- lack of a system for storing snippets of LaTeX boilerplate
+- time spent in Overleaf is not time spent in Emacs (but see work around solution below via GhostText)
+
 
 #### GhostText and Overleaf
-Overleaf does support Emacs keybindings.
+Overleaf does support a small subset of Emacs keybindings.
 Even better, if you select the legacy mode on Overleaf, you can send the text area to Emacs for editing via the GhostText plugin for your browser and the atomic-chrome package for Emacs.
 You can use snippets on the Emacs side of the websocket, and they will appear immediately on the Overleaf side.
 My configuration for atomic-chrome is below:
@@ -193,16 +205,15 @@ Org-mode includes support for document preparation, time management, and literat
 Many people in the past decade were drawn to Emacs by org-mode.
 Org documentats can recognize LaTeX markup.
 Exporting an org document through LaTeX to a PDF and having that PDF open in your default PDF viewer is seamless.
-However, compiling pdfs in Overleaf is more automated and even faster.
 
-The main drawbacks for me are as follows:
+The main drawbacks to org-mode for me are as follows:
 
-- Most publishers do not accept org files, but they do accept text files. (You can export the org file to a LaTeX file that might need heavy editing to get it accepted by the publisher.)
+- Most publishers do not accept org files, but they do accept tex files. (You can export the org file to a LaTeX file that might need heavy editing to get it accepted by the publisher.)
 - Overleaf does not support the use of org files. 
 - Org markup adds another layer of abstraction on top of LaTeX.
 
 I am already a LaTeX native.
-I do not need the crutch of org to produce tex files.
+I do not need the crutch of org-mode to produce tex files.
 
 
 <a id="Features"><h2>Features:</h2></a>
@@ -236,7 +247,7 @@ I do not need the crutch of org to produce tex files.
 4. Add `alias e29l='/Applications/Emacs29.0.5.app/Contents/MacOS/Emacs --init-directory ~/latex-emacs29` to your `.bashrc` or `.zshrc` file so you can open Emacs with alias `e29l`. 
 5. Add the GhostText extension to Chrome or Firefox or Safari or Edge.
 6. Install LaTeX and include in your PATH.
-7. Edit in `init.e`l the file path to texcount. This Perl script comes with LaTeX. You might be able to invoke texcount without the file path if you have no previously defined aliases to do texcount.
+7. Edit in `init.el` the file path to texcount. This Perl script comes with LaTeX. You might be able to invoke texcount without the file path if you have no previously defined aliases to do texcount.
 
 
 ## Operation
