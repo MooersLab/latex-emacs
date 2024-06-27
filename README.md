@@ -64,7 +64,7 @@ The *latex-emacs*  profile also serves as a backup configuration when I break my
 
 I use the following bash alias to start Emacs29 with the configuration stored in the folder *~/latex-emacs29*.
 Note that I am not hiding this folder in my top directory.
-I find the hindrance of hiding the Emacs configuration folder to be greater than the benefit of not accidentally deleting it once in a lifetime. 
+The hindrance of hiding the Emacs configuration folder is greater than the benefit of not accidentally deleting it once in a lifetime. 
 With my init.el file on GitHub, I can easily restore my Emacs configuration if disaster strikes.
 
 ```bash
@@ -83,7 +83,7 @@ alias e29ld='/Applications/Emacs29.0.5.app/Contents/MacOS/Emacs --init-directory
 
 ## Multiple versions of Emacs on the same computer
 
-You can have multiple versions of Emacs on your system; however, you will have to match the profiles to the Emacs version because the binaries in the elpa subfolder of the latex-emacs29 folder may not run with different versions of Emacs. 
+You can have multiple versions of Emacs on your system; however, you must match the profiles to the Emacs version because the binaries in the `elpa` subfolder of the latex-emacs29 folder may not run with different versions of Emacs. 
 
 No warranty is implied. Use at your own risk.
 
@@ -121,12 +121,12 @@ These features support efficient editing of LaTeX documents.
 
 In addition, you can extend Emacs with the Emacs Lisp programming language.
 Elisp is a variant of LISP that was customized to ease the configuring of Emacs.
-Emacs is essentially a platform for building a customized text editor.
+Emacs is a platform for building a customized text editor.
 You can customize your LaTeX environment and add functions to aid your workflow.
 
-Of course, other text editors have these features too.
-However, Emacs seems to me to be the most extensible.
-In my opinion, it is the ultimate editor: Once you become competent at it, you will not make another editor your primary editor.
+Of course, other text editors have these features too, but Emacs is the most extensible.
+It is the ultimate editor: Once you become competent at Emacs, you will not make another editor your primary editor.
+You might still use other editors, but Emacs will meet most of your needs.
 
 Emacs has been under development for 45 years.
 According to the [Lindy effect](https://wiki2.org/en/Lindy_Effect), it should be available for another 45 years.
@@ -159,15 +159,15 @@ The Pro license enables you to use Git to make copies of your writing projects o
 The reasons not to use Overleaf include the following: 
 
 - pricey annual subscription
-- lack of full support for Emacs key bindings
+- poor support for Emacs key bindings
 - lack of a system for storing snippets of LaTeX boilerplate
-- time spent in Overleaf is not time spent in Emacs (but see work around solution below via GhostText)
+- time spent in Overleaf is not time spent in Emacs (but see workaround solution below via GhostText)
 
 
 #### GhostText and Overleaf
 Overleaf does support a small subset of Emacs keybindings.
 Even better, if you select the legacy mode on Overleaf, you can send the text area to Emacs for editing via the GhostText plugin for your browser and the atomic-chrome package for Emacs.
-You can use snippets on the Emacs side of the websocket, and they will appear immediately on the Overleaf side.
+You can use snippets on the Emacs side of the websocket; the inserted code will appear immediately on the Overleaf side.
 My configuration for atomic-chrome is below:
 
 ```emacs-lisp
@@ -192,7 +192,7 @@ My configuration for atomic-chrome is below:
 
 ### Advantages of using LaTeX in Emacs over Overleaf
 
-- The availability of the yasnippets package. You can build document templates and save them as yasnippet snippets. You then insert the document template into a new file upon entering the snippet name and hitting tab.
+- The availability of the *yasnippets* package. You can build document templates and save them as yasnippet snippets. You then insert the document template into a new file upon entering the snippet name and hitting tab.
 - Powerful macros in AUCTeX support creating and editing new documents.
 - Syntax checking before compiling is available. See the keybinding lists below.
 - Terse and clear bug reporting during PDF compiling.
@@ -204,11 +204,11 @@ My configuration for atomic-chrome is below:
 Org-mode includes support for document preparation, time management, and literate programming.
 Many people in the past decade were drawn to Emacs by org-mode.
 Org documentats can recognize LaTeX markup.
-Exporting an org document through LaTeX to a PDF and having that PDF open in your default PDF viewer is seamless.
+It is seamless to export an org document through LaTeX to a PDF and open that PDF in your default PDF viewer.
 
 The main drawbacks to org-mode for me are as follows:
 
-- Most publishers do not accept org files, but they do accept tex files. (You can export the org file to a LaTeX file that might need heavy editing to get it accepted by the publisher.)
+- Most publishers do not accept org files, but they do accept tex files. (You can export the org file to a LaTeX file that might need heavy editing to get the publisher's acceptance.)
 - Overleaf does not support the use of org files. 
 - Org markup adds another layer of abstraction on top of LaTeX.
 
@@ -216,7 +216,7 @@ I am already a LaTeX native.
 I do not need the crutch of org-mode to produce tex files.
 
 
-<a id="Features"><h2>Features:</h2></a>
+<a id="Features"><h2>Features of this configuration:</h2></a>
 
 - Install packages from MELPA with use-package.
 - Uses Protesilaos Stavrou's (Prot's) [ef-themes](https://github.com/protesilaos/ef-themes) package. Set to the ef-cyprus theme. The ef-light theme is good too.
@@ -228,11 +228,11 @@ I do not need the crutch of org-mode to produce tex files.
 - Has hippieexpand enabled.
 - Uses the *awesome-tabs* package to enable navigation between buffers via tabs. (The keybindings s-0, s-1, ..., s9 enable switching tabs from the keyboard.)
 - Has the word count mode (*wc-mode*) enabled.
-- Has pomodoro-mode.
+- Includes pomodoro-mode.
 - Has minibuffer history.
-- Has *ivy* enabled for enhanced auto-completion selections.
+- Includes *ivy* enabled for enhanced auto-completion selections.
 - *atomic-chrome* configured to interact with *GhostText* extension for Google Chrome so you can edit in Emacs LaTeX documents on Chrome.
-- Use the *texcount* script with `C-c w` to get a more accurate word count when in latex-mode.
+- Includes the *texcount* script with `C-c w` to get a more accurate word count when in latex-mode.
 - Move N-selected lines up and down with the meta and the arrow keys.
 - Scratch buffer retained.
 - Add the itemize, enumerate, and description functions to convert selected markdown lists into LaTeX itemize, description, or enumerated lists.
@@ -369,4 +369,4 @@ The quizzes in the set have the same questions, but I randomized their order to 
 |:-----------:|:------------------------------------------------------------------------------------------------------------------------------------------:|:--------------------:|
 | Version 0.2 |  Added funding and update table. Minor edits to the README.md                                                                              | 2024 May 3           |
 | Version 0.2.1 | Minor edits in the README.md.                                                                                                            | 2024 May 10          |
-
+| Version 0.2.2| More minor edits in the README.md                                                                                                         | 2024 June 27         |
