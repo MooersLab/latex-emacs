@@ -304,7 +304,7 @@ If you are rusty or just starting to use Emacs, you need only these 23 key bindi
 
 |Key binding | Description|
 |:-----------|:-----------|
-|C-x C-x | Quit Emacs|
+|C-x C-c | Quit Emacs|
 |C-g     | Abort current command|
 |C-x C-f | Open a file|
 |M-!     | Open a shell, perhaps to create a file to open: touch new.tex|
@@ -315,7 +315,8 @@ If you are rusty or just starting to use Emacs, you need only these 23 key bindi
 |C-x C-s | Save file.|
 |C-x C-w | Save the current buffer to the specified filename.|
 |C-y     | Paste clipboard. |
-|C-w     | Cut |
+|C-w     | Cut and store in kill-ring (and clipboard).|
+|M-w     | Copy to kill-ring (and clipboard). |
 |s-c     | Copy (option-c). The init.el file above maps the Mac option key to `s`, the Super key.|
 |C-k     | Delete line and store in kill ring (i.e., clipboard). Repeat to delete the new-line character.|
 |C-a     | Move the cursor to the beginning of the line.|
@@ -327,6 +328,7 @@ If you are rusty or just starting to use Emacs, you need only these 23 key bindi
 |M-\     | Will join the two words by removing the whitespaces between two words. |
 |M-d     | Delete word. |
 |C-d     | Delete character. |
+|M-t     | Transpose two words when the cursor is in the space between the two words. Useful for editing full names in BibTeX entries.|
 
 
 
