@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/static/v1?label=latex-emacs&message=0.2.1&color=brightcolor)
+![Version](https://img.shields.io/static/v1?label=latex-emacs&message=0.2.3&color=brightcolor)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 
@@ -274,14 +274,14 @@ These keybindings are active in the latex-mode or useful in this mode.
 |M-RET       | To insert an item in the middle of the list. |
 |C-c C-e     | Enter to get a prompt for the kind of environment.|
 |C-c C-s     | Enter to insert a section or subsection.|
-| C-c C-a    | Compile and open PDF in default viewer|
+| C-c C-a    | Compile and open PDF in default viewer.|
 |C-c C-c     | Compile document.|
 |C-c `       | Go to compile error.|
 |C-c C-p C-s | Preview regions.|
 | C-c =      | Open navigable table of contents view of the document. |
 |C-c C-k     | Kill the text file processing.   |
 |C-c ;       | Comment out a region.|
-|C-c %       | Comment out a paragraph|
+|C-c %       | Comment out a paragraph.|
 |C-c C-a     | Compile a LaTeX text file and display the PDF in the default PDF viewer.|
 |C-j         | Add a new line and indent the new line.|
 |M-q         | To fill in a paragraph (text-wrap) and indent the current paragraph.   |
@@ -304,13 +304,13 @@ If you are rusty or just starting to use Emacs, you need only these 23 key bindi
 
 |Key binding | Description|
 |:-----------|:-----------|
-|C-x C-c | Quit Emacs|
-|C-g     | Abort current command|
-|C-x C-f | Open a file|
-|M-!     | Open a shell, perhaps to create a file to open: touch new.tex|
+|C-x C-c | Quit Emacs.|
+|C-g     | Abort current command.|
+|C-x C-f | Open a file.|
+|M-!     | Open a shell, perhaps to create a file to open: touch new.tex.|
 |C-SPC   | Mark the beginning of a selected region.|
 |C-x SPC | Start marking rectangular box selection.|
-|C-x u |  Undo|
+|C-x u |  Undo last command.|
 |C-M-_ | Redo undone changes.|
 |C-x C-s | Save file.|
 |C-x C-w | Save the current buffer to the specified filename.|
@@ -348,7 +348,7 @@ The quizzes in the set have the same questions, but I randomized their order to 
 
 <a id="Releted"><h2>Related projects of possible interest</h2></a>
 
-
+- [Peter Prevos's Emacs Writing Studio (You can compile the book in Emacs to PDF or HTML after opening the top-level org file: ./Documents/book/00-emacs-writing-studio.org. This is the first book to discuss using modern packages. The focus is on academic writing in Org and not on coding. I highly recommend this book for beginners (<1 year of experience) and advanced beginners (< a decade of experience with Emacs (Yes, Emacs is that hard to master.).](https://github.com/pprevos/emacs-writing-studio)
 - [LaTeX manuscript template](https://github.com/MooersLab/manuscriptInLaTeX/edit/main/README.md)
 - [Writing log template in LaTeX](https://github.com/MooersLab/writingLogTemplate)
 - [Slideshow template in LaTeX](https://github.com/MooersLab/slideshowTemplateLaTeX)
@@ -372,3 +372,4 @@ The quizzes in the set have the same questions, but I randomized their order to 
 | Version 0.2 |  Added funding and update table. Minor edits to the README.md                                                                              | 2024 May 3           |
 | Version 0.2.1 | Minor edits in the README.md.                                                                                                            | 2024 May 10          |
 | Version 0.2.2| More minor edits in the README.md                                                                                                         | 2024 June 27         |
+| Version 0.2.3| More minor edits in the README.md                                                                                                         | 2025 March 4         |
