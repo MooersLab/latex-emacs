@@ -411,21 +411,20 @@ It uses a beautiful theme that makes working in Emacs more pleasant.
 
 
 
-<a id="Releted"><h2>Related projects of possible interest</h2></a>
+<a id="Releted"><h2>My other related projects of possible interest</h2></a>
 
-- [Peter Prevos's Emacs Writing Studio (You can compile the book in Emacs to PDF or HTML after opening the top-level org file: ./Documents/book/00-emacs-writing-studio.org. This is the first book to discuss using modern packages. The focus is on academic writing in Org and not on coding. I highly recommend this book for beginners (<1 year of experience) and advanced beginners (< a decade of experience with Emacs (Yes, Emacs is that hard to master.).](https://github.com/pprevos/emacs-writing-studio)
 - [LaTeX manuscript template](https://github.com/MooersLab/manuscriptInLaTeX/edit/main/README.md)
 - [Writing log template in LaTeX](https://github.com/MooersLab/writingLogTemplate)
 - [Slideshow template in LaTeX](https://github.com/MooersLab/slideshowTemplateLaTeX)
 - [Annotated bibliography Template in LaTeX](https://github.com/MooersLab/annotatedBibliography)
-- [Diary for 2022 in LaTeX](https://github.com/MooersLab/diary2022inLaTeX)
-- [Diary for 2023 in LaTeX](https://github.com/MooersLab/diary2023inLaTeX)
-- [latex-emacs profile](https://github.com/MooersLab/latex-emacs)
-- [snippets for latex-mode in Emacs](https://github.com/MooersLab/snippet-latex-mode)
+- [My custom elisp functions to make specific tasks easier in Emacs](https://github.com/MooersLab/mooerslab-functions.el)
+- [Diary for 2025 in LaTeX](https://github.com/MooersLab/diary2025inLaTeX)
+- [Snippets for latex-mode in Emacs](https://github.com/MooersLab/snippet-latex-mode)
 - [Quizzes about Emacs to improve recall of keybindings](https://github.com/MooersLab/qemacs)
 - [Slides from talk about GhostText, Data Science Workshop, July 2022](https://github.com/MooersLab/DSW22ghosttext)
 - [Video link to talk about GhostText, Data Science Workshop, July 2022](https://mediasite.ouhsc.edu/Mediasite/Channel/python/watch/4da0872f028c4255ae12935655e911321d)
-- [The writer's law](https://github.com/MooersLab/thewriterslaw)
+- [The writer's law (for stoics)](https://github.com/MooersLab/thewriterslaw)
+- [Writing by dictation, good for those with repetitive stress injuires](https://github.com/MooersLab#voice-computing)
 
 ## Funding
 - NIH: R01 CA242845, R01 AI088011
@@ -433,8 +432,9 @@ It uses a beautiful theme that makes working in Emacs more pleasant.
 
 ## Updates
 |Version      | Changes                                                                                                                                    | Date                 |
-|:-----------:|:------------------------------------------------------------------------------------------------------------------------------------------:|:--------------------:|
-| Version 0.2 |  Added funding and update table. Minor edits to the README.md                                                                              | 2024 May 3           |
+|:-----------:|:-----------------------------------------------------------------------------:|:--------------------:|
+| Version 0.2 |  Added funding and update table. Minor edits to the README.md                 | 2024 May 3           |
 | Version 0.2.1 | Minor edits in the README.md.                                                                                                            | 2024 May 10          |
 | Version 0.2.2| More minor edits in the README.md                                                                                                         | 2024 June 27         |
 | Version 0.2.3| More minor edits in the README.md                                                                                                         | 2025 March 4         |
+| Version 0.2.4| Added review of EWS to README.md. Updated the related links section.                                                                                                         | 2025 March 5         |
