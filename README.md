@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/static/v1?label=latex-emacs&message=0.2.3&color=brightcolor)
+![Version](https://img.shields.io/static/v1?label=latex-emacs&message=0.2.4&color=brightcolor)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 
@@ -6,7 +6,7 @@
 
 ## Make writing tasks fun by disguising them as coding projects!
 
-This repo contains a `init.el` file (configuration file) for using LaTeX in GNU Emacs version 29.
+This repo contains an `init.el` file (configuration file) for using LaTeX in GNU Emacs version 29.
 You can adapt it to other configurations of Emacs (e.g., Spacemacs, Doom, etc).
 The SciMax configuration probably has similar support built-in.
 See latex-emacs28 and latex-emacs30 for configurations that work with Emacs version 28 and Emacs version 30, respectively. 
@@ -85,7 +85,8 @@ alias e29ld='/Applications/Emacs29.0.5.app/Contents/MacOS/Emacs --init-directory
 
 You can have multiple versions of Emacs on your system; however, you must match the profiles to the Emacs version because the binaries in the `elpa` subfolder of the latex-emacs29 folder may not run with different versions of Emacs. 
 
-No warranty is implied. Use at your own risk.
+No warranty is implied. 
+Use at your own risk.
 
 I used this configuration to prepare the [presentation](https://github.com/MooersLab/BerlinEmacsAugust2022) given to the Berlin Emacs Meetup on 31 August 2022.
 
@@ -93,7 +94,7 @@ I used this configuration to prepare the [presentation](https://github.com/Mooer
 
 LaTeX is the gold standard markup system for technical writing.
 
-- Combine a passion for coding with writing (e.i., make writing fun by disguising it as coding).
+- Combine a passion for coding with writing (i.e., make writing fun by disguising it as coding).
 - Code reuse: recycle old documents.
 - Precise control over the appearance of the output.
 - Equation typesetting par none.
@@ -111,7 +112,7 @@ LaTeX is the gold standard markup system for technical writing.
 - Overleaf supports collaborative writing.
 
 Most markdown variants do not support the automated generation of indices for large documents.
-Most literate programming projects built on top of markdown have this serious limitation.
+Most literate programming projects built on top of markdown have this serious limitation, but org-mode does not. See the section `Why Org`.
 
 
 ## Why Emacs?
@@ -120,19 +121,19 @@ Over the past several decades, many Emacs and package developers have developed 
 These features support efficient editing of LaTeX documents.
 
 In addition, you can extend Emacs with the Emacs Lisp programming language.
-Elisp is a variant of LISP that was customized to ease the configuring of Emacs.
+Elisp is a variant of LISP that was customized to ease Emacs configuration.
 Emacs is a platform for building a customized text editor.
 You can customize your LaTeX environment and add functions to aid your workflow.
 
 Of course, other text editors have these features too, but Emacs is the most extensible.
-It is the ultimate editor: Once you become competent at Emacs, you will not make another editor your primary editor.
+It is the ultimate editor.
 You might still use other editors, but Emacs will meet most of your needs.
 
 Emacs has been under development for 45 years.
 According to the [Lindy effect](https://wiki2.org/en/Lindy_Effect), it should be available for another 45 years.
 
 
-## Why not Overleaf?
+## Why Overleaf?
 
 Overleaf is a web-based LaTeX editor. 
 Overleaf is excellent for maintaining multiple writing projects and strongly supports collaborative editing.
@@ -143,12 +144,12 @@ I use this feature to generate outline views of the slide shows I am developing 
 I use this outline view to navigate to specific slides and to rearrange slides while editing the beamer file.
 Overleaf also has an extensive collection of attractive documentation about LaTeX, a nice supplement to TeX StackExchange.
 
-I have over 600s writing projects on Overleaf.
+I have over 780 writing projects on Overleaf.
 These projects include grant applications, manuscripts, slideshows, and posters.
 I often use an old project as a template to make a new project.
 This saves a lot of time.
 
-I use it multiple times daily because I store my daily writing in a book document that serves as my digital laboratory notebook.
+I use it multiple times daily because I store my daily writing in a book document as my digital laboratory notebook.
 I speed up navigation to active projects by storing their URLs on a private homepage (index.html).
 
 I have subscribed to the Pro license for several years and have used Overleaf for six years.
@@ -160,7 +161,7 @@ The reasons not to use Overleaf include the following:
 
 - pricey annual subscription
 - poor support for Emacs key bindings
-- lack of a system for storing snippets of LaTeX boilerplate
+- lack of a system for storing snippets of custom LaTeX boilerplate
 - time spent in Overleaf is not time spent in Emacs (but see workaround solution below via GhostText)
 
 
@@ -189,6 +190,21 @@ My configuration for atomic-chrome is below:
 (setq atomic-chrome-buffer-open-style 'split)
 ```
 
+If you use the text area of Overleaf, 750words, or WriteHoney and you have Voice In plus installed in Google Chrom, you can carry out dictation in a text area that will be mirrored in Emacs via GhostText.
+The advantage of doing this over using the `whisper.el` package is that you can dictate in longer spurts, and you can use your custom voice triggers to activate the insertion of text replacements.
+
+For example, I abhor English contractions because I do not believe they will weather well over time. 
+They also violate the principles of scientific writing, which are be clear, precise, and concise.
+Above all, scientific writing must be clear.
+Contractions reduce clarity, especially for non-native English speakers.
+I have mapped almost 200 contractions to their expansions.
+When I say an English contraction, it serves as a voice trigger that leads to the insertion of its expansion.
+This spares me the trouble of correcting these manually.
+I have also mapped expansions of acronyms to voice triggers so that I can accurately expand the acronym on the fly without looking it up for the 10th time.
+I have also mapped various kinds of LaTeX codes to voice triggers.
+See the bottom section of the Mooerslab GitHub landing page for more information about [how I use voice computing in my daily work](https://github.com/MooersLab#voice-computing).
+
+
 
 ### Advantages of using LaTeX in Emacs over Overleaf
 
@@ -199,21 +215,29 @@ My configuration for atomic-chrome is below:
 - Preview a rendered version of a select region in the buffer. You remove the preview with a key binding. The preview allows you to check an equation's typesetting without going through the longer step of compiling the file into a PDF.
 
 
-## Why not Org-mode
+## Why Org-mode
 
 Org-mode includes support for document preparation, time management, and literate programming.
 Many people in the past decade were drawn to Emacs by org-mode.
-Org documentats can recognize LaTeX markup.
-It is seamless to export an org document through LaTeX to a PDF and open that PDF in your default PDF viewer.
+Org documents recognize the most commonly used features of LaTeX markup.
+You can use a LaTeX preamble in the front matter of your org file to use your favorite LaTeX packages and settings.
+You can make the PDF coming out of org look precisely like the PDF that you would generate from LaTeX.
+You can use LaTeX to build indices, glossaries, list of acronyms, lists the tables, list of figures, lists of code listings, list of equations, and so on.
+
+I now think of org-mode as a thin but very powerful wrapper around LaTeX.
+By utilizing org-mode, you gain the very easy-to-assemble tables that org-mode provides.
+You also gain some very convenient ways of utilizing Gnuplot to quickly generate plots.
+You gain integration with org-roam for knowledge management because the notes in the system are org files.
+You can use this knowledge management in lieu of or in addition to an annotated bibliography.
+You gain interactive computing in source blocks.
+
 
 The main drawbacks to org-mode for me are as follows:
 
-- Most publishers do not accept org files, but they do accept tex files. (You can export the org file to a LaTeX file that might need heavy editing to get the publisher's acceptance.)
+- Most publishers do not accept org files, but they do accept tex files. (You can export the org file to a LaTeX file that might still need heavy editing of the preamble to get the publisher's acceptance.)
 - Overleaf does not support the use of org files. 
-- Org markup adds another layer of abstraction on top of LaTeX.
+- Org markup adds another layer of abstraction on top of LaTeX. This layer is thin and not that big of a deal.
 
-I am already a LaTeX native.
-I do not need the crutch of org-mode to produce tex files.
 
 
 <a id="Features"><h2>Features of this configuration:</h2></a>
@@ -274,11 +298,11 @@ These keybindings are active in the latex-mode or useful in this mode.
 |M-RET       | To insert an item in the middle of the list. |
 |C-c C-e     | Enter to get a prompt for the kind of environment.|
 |C-c C-s     | Enter to insert a section or subsection.|
-| C-c C-a    | Compile and open PDF in default viewer.|
+| C-c C-a    | Compile and open PDF in the default viewer.|
 |C-c C-c     | Compile document.|
 |C-c `       | Go to compile error.|
 |C-c C-p C-s | Preview regions.|
-| C-c =      | Open navigable table of contents view of the document. |
+| C-c =      | Open the navigable table of contents view of the document. |
 |C-c C-k     | Kill the text file processing.   |
 |C-c ;       | Comment out a region.|
 |C-c %       | Comment out a paragraph.|
@@ -356,13 +380,13 @@ He has a playlist of a half dozen [videos](https://www.youtube.com/playlist?list
 
 He has also written a [book](https://github.com/pprevos/emacs-writing-studio) about how to utilize EWS.
 The book is available as an ebook, but you can compile the book via org-mode.
-Open the top-level org file `./Documents/book/00-emacs-writing-studio.org` that imports the individual chapters and other parts of the book.
+Open the top-level org file `./Documents/book/00-emacs-writing-studio.org` that imports the book's individual chapters and other parts.
 To make a PDF of the book, use the keybinding `C-c C-e l o` to export it PDF and open it.
 
 This book is groundbreaking in several regards.
 This is the first book about Emacs to discuss modern writing workflows utilizing packages like citar and denote.
-It is also the first Emacs book that I am aware of that is built around one `init.el` file.
-Hopefully, this book inspires other authors of init.el files to write books about their `init.el` files.
+It is also the first Emacs book I am aware of built around an `init.el` file.
+Hopefully, this book will inspire other authors to write books about their `init.el` files.
 
 The first 50 pages of this book provide an excellent introduction to Emacs for both coders and writers.
 The following 100 pages are more focused on the writing process in EWS.
@@ -381,7 +405,7 @@ His book is highly accessible, but I am a poor judge of what a beginner would th
 
 He developed several packages that bring functionality similar to that of org-roam.
 His citar-denote package integrates the use of citar to assist the generation of literature notes for use in denote.
-His denote-explore package provides several tools for analyzing notes' distribution across topics and generating directed graphs of links between notes.
+His denote-explore package provides several tools for analyzing the distribution of notes across topics and generating directed graphs of links between notes.
 The first functionality is absent for org-roam.
 The second functionality mimics the org-roam-ui.
 These two packages are integrated into his init.el file.
@@ -393,8 +417,8 @@ The filename has five components.
 Retrieval of notes and their linking is based on elements of the filename.
 I find this approach to be very robust to future changes in technology.
 
-However, I think that assembling a personal Knowledge Management System can be quite a time sink.
-Creating forward and backlinks is as time-consuming and tedious as it is in org-roam.
+However, assembling a personal Knowledge Management System can be quite a time-sink.
+Creating forward and backlinks is as time-consuming and tedious as in org-roam.
 I will not start such a knowledge base if you face a deadline.
 
 His profile is meant to be easy to install and requires little customization.
@@ -403,7 +427,7 @@ You will have to wait several minutes while the new packages are installed the f
 Emacs will start quickly the second time that you start Emacs with EWS.
 
 I have installed his profile for use with Emacs 30.1. 
-There is an error message that is reported but it can be safely ignored. 
+An error message was reported, but it can be safely ignored. 
 The profile works as expected. 
 It uses a beautiful theme that makes working in Emacs more pleasant.
 
@@ -418,13 +442,13 @@ It uses a beautiful theme that makes working in Emacs more pleasant.
 - [Slideshow template in LaTeX](https://github.com/MooersLab/slideshowTemplateLaTeX)
 - [Annotated bibliography Template in LaTeX](https://github.com/MooersLab/annotatedBibliography)
 - [My custom elisp functions to make specific tasks easier in Emacs](https://github.com/MooersLab/mooerslab-functions.el)
-- [Diary for 2025 in LaTeX](https://github.com/MooersLab/diary2025inLaTeX)
+- [Diary for 2024 in LaTeX](https://github.com/MooersLab/diary2024inLaTeX)
 - [Snippets for latex-mode in Emacs](https://github.com/MooersLab/snippet-latex-mode)
 - [Quizzes about Emacs to improve recall of keybindings](https://github.com/MooersLab/qemacs)
 - [Slides from talk about GhostText, Data Science Workshop, July 2022](https://github.com/MooersLab/DSW22ghosttext)
 - [Video link to talk about GhostText, Data Science Workshop, July 2022](https://mediasite.ouhsc.edu/Mediasite/Channel/python/watch/4da0872f028c4255ae12935655e911321d)
 - [The writer's law (for stoics)](https://github.com/MooersLab/thewriterslaw)
-- [Writing by dictation, good for those with repetitive stress injuires](https://github.com/MooersLab#voice-computing)
+- [Writing by dictation, suitable for those with repetitive stress injuries](https://github.com/MooersLab#voice-computing)
 
 ## Funding
 - NIH: R01 CA242845, R01 AI088011
@@ -437,4 +461,4 @@ It uses a beautiful theme that makes working in Emacs more pleasant.
 | Version 0.2.1 | Minor edits in the README.md.                                                                                                            | 2024 May 10          |
 | Version 0.2.2| More minor edits in the README.md                                                                                                         | 2024 June 27         |
 | Version 0.2.3| More minor edits in the README.md                                                                                                         | 2025 March 4         |
-| Version 0.2.4| Added review of EWS to README.md. Updated the related links section.                                                                                                         | 2025 March 5         |
+| Version 0.2.4| Added review of EWS to README.md. Updated related links section.                                                                                                         | 2025 March 5         |
