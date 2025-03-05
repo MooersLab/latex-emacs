@@ -373,63 +373,27 @@ The quizzes in the set have the same questions, but I randomized their order to 
 
 ### Peter Prevos's Emacs Writing Studio (EWS)
 
-Peter Prevos developed a similar Emacs profile (i.e., init.el file) for academic writing focused on utilizing org-mode for document assembly, citar for bibliography management, and denote for knowledge management.
-He gave a [talk](https://emacsconf.org/2024/talks/writing/) about EWS in December 2025 at the emacsconf.
-He gave one of the best-organized talks at this conference.
-He has a playlist of a half dozen [videos](https://www.youtube.com/playlist?list=PLGx4TR_jvOQDIT878vGDe1ElUlij3UEKI) on YouTube about various aspects of deploying EWS.
+Peter Prevos developed a similar Emacs profile (i.e., init.el file) for academic writing focused on utilizing org-mode for document assembly, citar for bibliography management, and denote for knowledge management. He gave a talk about EWS in December 2025 at the emacsconf. He gave one of the best-organized talks at this conference. Furthermore, he has a playlist of five videos on YouTube about various aspects of deploying EWS.
 
-He has also written a [book](https://github.com/pprevos/emacs-writing-studio) about how to utilize EWS.
-The book is available as an ebook, but you can compile the book via org-mode.
-Open the top-level org file `./Documents/book/00-emacs-writing-studio.org` that imports the book's individual chapters and other parts.
-To make a PDF of the book, use the keybinding `C-c C-e l o` to export it PDF and open it.
+He has also written a book about how to utilize EWS. The book is available for purchase as an e-book, but you can compile it via org-mode. Open the top-level org file ./Documents/book/00-emacs-writing-studio.org that imports the book's chapters and other parts. To make a PDF of the book, use the key binding `C-c C-e l o` to export it PDF and open it.
 
-This book is groundbreaking in several regards.
-This is the first book about Emacs to discuss modern writing workflows utilizing packages like citar and denote.
-It is also the first Emacs book I am aware of built around an `init.el` file.
-Hopefully, this book will inspire other authors to write books about their `init.el` files.
+This book is groundbreaking in several regards. This is the first book about Emacs to discuss modern writing workflows utilizing packages like citar and denote. It is also the first Emacs book I know that is built around an `init.el` file. Hopefully, this book will inspire other authors to write books about their `init.el` files.
 
-The first 50 pages of this book provide an excellent introduction to Emacs for both coders and writers.
-The following 100 pages are more focused on the writing process in EWS.
-The last 50 pages is an Appendix that walks through the init.el file and explains the roles of each of the settings and packages.
-This is one of the most valuable appendices I have ever read and one of the few I have read in one sitting from beginning to end.
+The first 50 pages of this book provide an excellent introduction to Emacs for both coders and writers. The following 100 pages are more focused on the writing process in EWS. The last 50 pages is an Appendix that walks through the init.el file and explains the roles of each of the settings and packages. This is one of the most valuable appendices I have ever read and one of the few I have read in one sitting from beginning to end.
 
-The book lacks an index, which is surprising because utilizing the LaTeX indexing system inside of org-mode is relatively trivial.
-He might have faced limitations with exporting indices to other publication formats beyond LaTeX.
-His intent was to make this book available in multiple formats
+The book lacks an index, which is surprising because utilizing the LaTeX indexing system inside org-mode is relatively trivial. He might have faced limitations with exporting indices to other publication formats beyond LaTeX. His intent was to make this book available in multiple formats.
 
-I recommend taking a learning spiral approach to getting started with EWS.
-I first watched his emacsconf talk.
-I did not discover his YouTube videos until after I had installed EWS and read his book.
-If I were to do things over again, I would watch the YouTube videos before reading his book.
-His book is highly accessible, but I am a poor judge of what a beginner would think because I have been a daily user of Emacs for four years.
+I recommend taking a learning spiral approach to getting started with EWS. I first watched his emacsconf talk. I did not discover his YouTube videos until after I had installed EWS and read his book. If I were to do things over again, I would watch the YouTube videos before reading his book. His book is highly accessible, but I am a poor judge of what a beginner would think because I have been a daily user of Emacs for four years.
 
-He developed several packages that bring functionality similar to that of org-roam.
-His citar-denote package integrates the use of citar to assist the generation of literature notes for use in denote.
-His denote-explore package provides several tools for analyzing the distribution of notes across topics and generating directed graphs of links between notes.
-The first functionality is absent for org-roam.
-The second functionality mimics the org-roam-ui.
-These two packages are integrated into his init.el file.
-These are valuable contributions because Peter has made the denote package attractive to org-roam users and more accessible to academics.
+He developed several packages that bring functionality similar to that of org-roam. His citar-denote package integrates the use of citar to assist the generation of literature notes for use in denote. His denote-explore package provides tools for analyzing the distribution of notes across topics and generating directed graphs of links between notes. The first functionality is absent from org-roam. The second functionality mimics the org-roam-ui. These two packages are integrated into his init.el file. These are valuable contributions because Peter has made the denote package attractive to org-roam users and more accessible to academics.
 
-The denote system of personal knowledge management relies on filenames for information retrieval.
-It does not utilize a database, like org-roam.
-The filename has five components.
-Retrieval of notes and their linking is based on elements of the filename.
-I find this approach to be very robust to future changes in technology.
+The denote system of personal knowledge management relies on filenames for information retrieval. It does not utilize a database, like org-roam. The filename has five components. Retrieval of notes and their linking is based on elements of the filename. I find this approach to be very robust to future changes in technology.
 
-However, assembling a personal Knowledge Management System can be quite a time-sink.
-Creating forward and backlinks is as time-consuming and tedious as in org-roam.
-I will not start such a knowledge base if you face a deadline.
+However, assembling a personal Knowledge Management System can be quite a time-sink. Creating forward and backlinks is as time-consuming and tedious as in org-roam. I would not start such a knowledge base if I faced a deadline.
 
-His profile is meant to be easy to install and requires little customization.
-You do have to define a few file paths, such as where you will install your denote notes.
-You will have to wait several minutes while the new packages are installed the first time that you launch Emacs with this with his init.el file.
-Emacs will start quickly the second time that you start Emacs with EWS.
+His profile is meant to be easy to install and requires little customization. You do have to define a few file paths, such as where you will install your denote notes. You will have to wait several minutes while the new packages are installed the first time that you launch Emacs with his init.el file. Emacs will start in 1-2 seconds the second time that you start Emacs with the EWS init.el file.
 
-I have installed his profile for use with Emacs 30.1. 
-An error message was reported, but it can be safely ignored. 
-The profile works as expected. 
-It uses a beautiful theme that makes working in Emacs more pleasant.
+I have installed his profile for use with Emacs 30.1. An error message was reported, but it can be safely ignored. The profile works as expected. It uses a beautiful theme that makes working in Emacs more pleasant. I have started using his key bindings for denote and denote-explore. They are pleasant to work with.
 
 
 
